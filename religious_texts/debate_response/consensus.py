@@ -1204,8 +1204,8 @@ def get_scholarly_consensus(question: str, include_traditions: Optional[List[str
     matched_question = False
     
     # Q1: Johannine authorship
-    if (("who wrote" in question_lower and "john" in question_lower) or
-       ("authorship" in question_lower and "john" in question_lower) or
+    if ((("who wrote" in question_lower) and ("john" in question_lower)) or
+       (("authorship" in question_lower) and ("john" in question_lower)) or
        ("johannine authorship" in question_lower)):
         
         matched_question = True
@@ -1243,8 +1243,8 @@ def get_scholarly_consensus(question: str, include_traditions: Optional[List[str
         ]
     
     # Q2: Jesus's divinity in Mark
-    elif (("divinity" in question_lower and "mark" in question_lower) or
-         ("mark" in question_lower and "divine" in question_lower and "jesus" in question_lower)):
+    elif ((("divinity" in question_lower) and ("mark" in question_lower)) or
+         (("mark" in question_lower) and ("divine" in question_lower) and ("jesus" in question_lower))):
         
         matched_question = True
         result["positions"] = [
