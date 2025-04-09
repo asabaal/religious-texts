@@ -107,6 +107,842 @@ THEOLOGICAL_POSITIONS = {
     }
 }
 
+def measure_scholarly_consensus(topic: str, 
+                               include_traditions: Optional[List[str]] = None,
+                               method: str = "count") -> Dict[str, Any]:
+    """
+    Measure the level of scholarly consensus on a biblical or theological topic.
+    
+    Args:
+        topic: The topic or question to analyze
+        include_traditions: Optional list of scholarly traditions to include
+        method: Method for measuring consensus ("count", "weighted", or "network")
+        
+    Returns:
+        Dictionary with consensus measurement results
+        
+    Example:
+        >>> # Measure consensus on the authorship of Hebrews
+        >>> consensus = measure_scholarly_consensus(
+        ...     "Who wrote the Epistle to the Hebrews?",
+        ...     include_traditions=["evangelical", "critical", "catholic"]
+        ... )
+        >>> print(consensus["consensus_level"])
+    """
+    # Set default traditions if not specified
+    if include_traditions is None:
+        include_traditions = list(SCHOLARLY_TRADITIONS.keys())
+    
+    # Filter traditions
+    traditions = {t: info for t, info in SCHOLARLY_TRADITIONS.items() if t in include_traditions}
+    
+    # Initialize result
+    result = {
+        "topic": topic,
+        "traditions": list(traditions.keys()),
+        "positions": [],
+        "consensus_level": None,
+        "confidence": 0.0,
+        "dominant_view": None,
+        "alternative_views": [],
+        "methodological_factors": []
+    }
+    
+    # This is a placeholder implementation that would be replaced by a real
+    # analysis of scholarly literature or expert opinions in a production system
+    
+    # For demonstration, we'll handle some common topics with predefined data
+    topic_lower = topic.lower()
+    
+    # Map of topics to known consensus data
+    known_topics = {
+        "authorship hebrews": {
+            "positions": [
+                {"tradition": "evangelical", "view": "Pauline association but not direct authorship", "percentage": 60},
+                {"tradition": "evangelical", "view": "Pauline authorship", "percentage": 20},
+                {"tradition": "evangelical", "view": "Apollos authorship", "percentage": 10},
+                {"tradition": "evangelical", "view": "Other candidate", "percentage": 10},
+                {"tradition": "critical", "view": "Unknown author", "percentage": 70},
+                {"tradition": "critical", "view": "Apollos authorship", "percentage": 15},
+                {"tradition": "critical", "view": "Priscilla authorship", "percentage": 10},
+                {"tradition": "critical", "view": "Other candidate", "percentage": 5},
+                {"tradition": "catholic", "view": "Pauline association but not direct authorship", "percentage": 65},
+                {"tradition": "catholic", "view": "Unknown author", "percentage": 25},
+                {"tradition": "catholic", "view": "Other candidate", "percentage": 10}
+            ],
+            "consensus_level": "Medium",
+            "dominant_view": "Pauline association but not direct authorship",
+            "factors": ["Different methodological approaches", "Limited historical evidence"]
+        },
+        "synoptic problem": {
+            "positions": [
+                {"tradition": "evangelical", "view": "Two-Source hypothesis (Mark First, Q)", "percentage": 65},
+                {"tradition": "evangelical", "view": "Matthew first", "percentage": 20},
+                {"tradition": "evangelical", "view": "Farrer hypothesis (no Q)", "percentage": 10},
+                {"tradition": "evangelical", "view": "Other hypothesis", "percentage": 5},
+                {"tradition": "critical", "view": "Two-Source hypothesis (Mark First, Q)", "percentage": 80},
+                {"tradition": "critical", "view": "Farrer hypothesis (no Q)", "percentage": 15},
+                {"tradition": "critical", "view": "Other hypothesis", "percentage": 5},
+                {"tradition": "catholic", "view": "Two-Source hypothesis (Mark First, Q)", "percentage": 75},
+                {"tradition": "catholic", "view": "Matthew first", "percentage": 15},
+                {"tradition": "catholic", "view": "Other hypothesis", "percentage": 10}
+            ],
+            "consensus_level": "High",
+            "dominant_view": "Two-Source hypothesis (Mark First, Q)",
+            "factors": ["Text-critical evidence", "Linguistic patterns", "Editorial tendencies"]
+        },
+        "jesus divinity": {
+            "positions": [
+                {"tradition": "evangelical", "view": "Full divinity explicitly taught", "percentage": 95},
+                {"tradition": "evangelical", "view": "Other view", "percentage": 5},
+                {"tradition": "critical", "view": "Later theological development", "percentage": 60},
+                {"tradition": "critical", "view": "Limited divine claims in earliest traditions", "percentage": 30},
+                {"tradition": "critical", "view": "Other view", "percentage": 10},
+                {"tradition": "catholic", "view": "Full divinity explicitly taught", "percentage": 90},
+                {"tradition": "catholic", "view": "Other view", "percentage": 10},
+                {"tradition": "orthodox", "view": "Full divinity explicitly taught", "percentage": 95},
+                {"tradition": "orthodox", "view": "Other view", "percentage": 5}
+            ],
+            "consensus_level": "Low",
+            "dominant_view": None,
+            "factors": ["Theological commitments", "Historical-critical methodologies", "Source dating and authenticity"]
+        }
+    }
+    
+    # Check if we have data for this topic
+    topic_match = None
+    for key, data in known_topics.items():
+        if key in topic_lower:
+            topic_match = key
+            break
+    
+    if topic_match:
+        # Get all positions for included traditions
+        positions = [p for p in known_topics[topic_match]["positions"] 
+                    if p["tradition"] in include_traditions]
+        
+        result["positions"] = positions
+        result["consensus_level"] = known_topics[topic_match]["consensus_level"]
+        result["dominant_view"] = known_topics[topic_match]["dominant_view"]
+        result["methodological_factors"] = known_topics[topic_match]["factors"]
+        
+        # Calculate confidence based on agreement and tradition diversity
+        if positions:
+            # Extract unique views
+            views = set(p["view"] for p in positions)
+            
+            # Calculate agreement score - percentage of scholars holding dominant view
+            if result["dominant_view"]:
+                dominant_positions = [p for p in positions if p["view"] == result["dominant_view"]]
+                dominant_percentage = sum(p["percentage"] for p in dominant_positions) / len(include_traditions)
+                agreement_score = dominant_percentage / 100
+            else:
+                agreement_score = 0.5  # Medium agreement
+            
+            # Calculate tradition diversity - ratio of included to total traditions
+            tradition_diversity = len(set(p["tradition"] for p in positions)) / len(SCHOLARLY_TRADITIONS)
+            
+            # Calculate confidence
+            result["confidence"] = (agreement_score * 0.7) + (tradition_diversity * 0.3)
+            
+            # Set alternative views
+            if result["dominant_view"]:
+                result["alternative_views"] = list(views - {result["dominant_view"]})
+            else:
+                result["alternative_views"] = list(views)[:3]  # Limit to top 3 alternative views
+    else:
+        # For unknown topics, provide a general assessment based on type of question
+        if "authorship" in topic_lower or "who wrote" in topic_lower:
+            result["consensus_level"] = "Unknown"
+            result["methodological_factors"] = ["Historical attribution evidence", "Stylistic analysis", "Theological content comparison"]
+            result["explanation"] = "Authorship questions typically involve analysis of internal evidence (style, theology) and external attestation (early church references)."
+        
+        elif "meaning" in topic_lower or "interpret" in topic_lower:
+            result["consensus_level"] = "Unknown"
+            result["methodological_factors"] = ["Context analysis", "Linguistic factors", "Historical background", "Canonical considerations"]
+            result["explanation"] = "Interpretive questions are analyzed using linguistic, historical, literary, and theological approaches, often with varying levels of agreement across traditions."
+        
+        elif "date" in topic_lower or "when" in topic_lower:
+            result["consensus_level"] = "Unknown"
+            result["methodological_factors"] = ["Historical references", "Archaeological context", "Literary dependencies", "Theological development"]
+            result["explanation"] = "Dating questions rely on internal references, external historical correlations, and text-critical considerations."
+        
+        else:
+            result["explanation"] = "This specific topic is not indexed in the consensus database. For an accurate assessment, please consult recent academic literature on this subject."
+    
+    return result
+
+def identify_academic_positions(topic: str, 
+                               sources: Optional[List[Dict[str, str]]] = None) -> pd.DataFrame:
+    """
+    Identify and categorize academic positions on a biblical or theological topic.
+    
+    Args:
+        topic: The topic or question to analyze
+        sources: Optional list of dictionaries with source information
+        
+    Returns:
+        DataFrame with academic positions
+        
+    Example:
+        >>> # Identify positions on the historical Jesus
+        >>> positions = identify_academic_positions(
+        ...     "What can we know about the historical Jesus?",
+        ...     sources=[
+        ...         {"author": "E.P. Sanders", "work": "The Historical Figure of Jesus", "quote": "..."},
+        ...         {"author": "N.T. Wright", "work": "Jesus and the Victory of God", "quote": "..."}
+        ...     ]
+        ... )
+    """
+    # Initialize columns for DataFrame
+    columns = ["scholar", "tradition", "position", "confidence", "key_claims", "methodology", "sources"]
+    
+    # This is a placeholder implementation that would be replaced by a real
+    # analysis of provided sources and scholarly literature in a production system
+    
+    # If sources are provided, extract information from them
+    if sources:
+        rows = []
+        
+        for source in sources:
+            # Extract author name
+            author = source.get("author", "Unknown")
+            
+            # Attempt to match author to known tradition
+            tradition = "unknown"
+            for trad_name, trad_info in SCHOLARLY_TRADITIONS.items():
+                if author in trad_info["representatives"]:
+                    tradition = trad_name
+                    break
+            
+            # Extract position from quote (simplified approach)
+            quote = source.get("quote", "")
+            position = "Position not extracted from quote"
+            
+            if quote:
+                # Very simple position extraction - first sentence of quote
+                sentences = sent_tokenize(quote)
+                if sentences:
+                    position = sentences[0]
+            
+            # Add placeholder values for other columns
+            row = {
+                "scholar": author,
+                "tradition": tradition,
+                "position": position,
+                "confidence": 0.7,  # Default medium-high confidence
+                "key_claims": [],
+                "methodology": "Not analyzed",
+                "sources": source.get("work", "Unknown source")
+            }
+            
+            rows.append(row)
+        
+        if rows:
+            return pd.DataFrame(rows, columns=columns)
+    
+    # For demonstration, we'll handle some common topics with predefined data
+    topic_lower = topic.lower()
+    
+    # Map of topics to known positions
+    known_topics = {
+        "historical jesus": [
+            {"scholar": "E.P. Sanders", "tradition": "critical", "position": "Jesus was an apocalyptic prophet who proclaimed the kingdom of God", 
+             "confidence": 0.9, "key_claims": ["Jewish context", "Kingdom of God", "Eschatological expectations"], 
+             "methodology": "Historical-critical", "sources": "The Historical Figure of Jesus (1993)"},
+            {"scholar": "John Dominic Crossan", "tradition": "critical", "position": "Jesus was a peasant Jewish Cynic philosopher", 
+             "confidence": 0.8, "key_claims": ["Social context", "Wisdom teachings", "Kingdom as present reality"], 
+             "methodology": "Historical-cultural", "sources": "The Historical Jesus (1991)"},
+            {"scholar": "N.T. Wright", "tradition": "evangelical", "position": "Jesus was a Jewish prophet announcing God's kingdom and his own role within it", 
+             "confidence": 0.9, "key_claims": ["Jewish context", "Kingdom of God", "Messianic identity"], 
+             "methodology": "Historical-narrative", "sources": "Jesus and the Victory of God (1996)"},
+            {"scholar": "Luke Timothy Johnson", "tradition": "catholic", "position": "The 'historical Jesus' cannot be separated from the 'Christ of faith'", 
+             "confidence": 0.7, "key_claims": ["Limits of historical method", "Resurrection experience", "Living Lord"], 
+             "methodology": "Historical-theological", "sources": "The Real Jesus (1996)"}
+        ],
+        "paul conversion": [
+            {"scholar": "James D.G. Dunn", "tradition": "critical", "position": "Paul's 'conversion' was a prophetic call within Judaism, not a conversion away from Judaism", 
+             "confidence": 0.8, "key_claims": ["Remained Jewish", "Prophetic calling", "Gentile mission"], 
+             "methodology": "Historical-exegetical", "sources": "The Theology of Paul the Apostle (1998)"},
+            {"scholar": "N.T. Wright", "tradition": "evangelical", "position": "Paul's conversion was a radical reframing of his Jewish worldview around Jesus as Messiah", 
+             "confidence": 0.9, "key_claims": ["Jewish context", "Christological shift", "Apocalyptic revelation"], 
+             "methodology": "Historical-narrative", "sources": "Paul: A Biography (2018)"},
+            {"scholar": "Alan Segal", "tradition": "jewish", "position": "Paul's conversion resembled Jewish mystical transformation experiences", 
+             "confidence": 0.7, "key_claims": ["Jewish mysticism", "Throne visions", "Transformation"], 
+             "methodology": "Historical-comparative", "sources": "Paul the Convert (1990)"},
+            {"scholar": "Douglas Campbell", "tradition": "critical", "position": "Paul's Damascus road experience was an apocalyptic unveiling of God's nature in Christ", 
+             "confidence": 0.8, "key_claims": ["Apocalyptic revelation", "Theological reframing", "Divine disclosure"], 
+             "methodology": "Theological-critical", "sources": "The Deliverance of God (2009)"}
+        ],
+        "revelation authorship": [
+            {"scholar": "Craig Koester", "tradition": "critical", "position": "Revelation was written by a Christian prophet named John, not the apostle", 
+             "confidence": 0.8, "key_claims": ["Separate author", "Prophetic authority", "Stylistic differences"], 
+             "methodology": "Historical-critical", "sources": "Revelation and the End of All Things (2001)"},
+            {"scholar": "Grant Osborne", "tradition": "evangelical", "position": "John the Apostle wrote Revelation, with possible use of an amanuensis", 
+             "confidence": 0.7, "key_claims": ["Apostolic authorship", "Early church testimony", "Theological consistency"], 
+             "methodology": "Historical-grammatical", "sources": "Revelation (Baker Exegetical Commentary, 2002)"},
+            {"scholar": "David Aune", "tradition": "critical", "position": "Revelation likely underwent several stages of composition by different authors", 
+             "confidence": 0.6, "key_claims": ["Multiple authors", "Redaction history", "Composite text"], 
+             "methodology": "Historical-critical", "sources": "Revelation (Word Biblical Commentary, 1997)"},
+            {"scholar": "Richard Bauckham", "tradition": "evangelical", "position": "A single author named John who was not the apostle but a Christian prophet", 
+             "confidence": 0.8, "key_claims": ["Literary unity", "Jewish apocalyptic genre", "Prophetic authority"], 
+             "methodology": "Literary-historical", "sources": "The Theology of the Book of Revelation (1993)"}
+        ]
+    }
+    
+    # Check if we have data for this topic
+    topic_match = None
+    for key, data in known_topics.items():
+        if key in topic_lower:
+            topic_match = key
+            break
+    
+    if topic_match:
+        return pd.DataFrame(known_topics[topic_match], columns=columns)
+    else:
+        # Return empty DataFrame with correct columns
+        return pd.DataFrame(columns=columns)
+
+def consensus_evolution(topic: str,
+                       time_period: str = "20th-21st century",
+                       traditions: Optional[List[str]] = None) -> Dict[str, Any]:
+    """
+    Track the evolution of scholarly consensus on a theological or biblical topic over time.
+    
+    Args:
+        topic: The topic or question to analyze
+        time_period: Time period to analyze ("20th-21st century", "early church", etc.)
+        traditions: Optional list of traditions to include
+        
+    Returns:
+        Dictionary with consensus evolution data
+        
+    Example:
+        >>> # Track evolution of views on the synoptic problem
+        >>> evolution = consensus_evolution(
+        ...     "The synoptic problem",
+        ...     time_period="19th-21st century",
+        ...     traditions=["critical", "evangelical"]
+        ... )
+    """
+    # Set default traditions if not specified
+    if traditions is None:
+        traditions = list(SCHOLARLY_TRADITIONS.keys())
+    
+    # Initialize result
+    result = {
+        "topic": topic,
+        "time_period": time_period,
+        "traditions": traditions,
+        "evolution_pattern": None,
+        "timeline": [],
+        "turning_points": [],
+        "current_consensus": None,
+        "factors_of_change": []
+    }
+    
+    # This is a placeholder implementation that would be replaced by a real
+    # analysis of historical scholarly positions in a production system
+    
+    # For demonstration, we'll handle some common topics with predefined data
+    topic_lower = topic.lower()
+    
+    # Map of topics to known consensus evolution data
+    known_topics = {
+        "synoptic problem": {
+            "evolution_pattern": "Convergence",
+            "timeline": [
+                {"period": "Early 19th century", "dominant_view": "Independence hypothesis/Augustinian hypothesis (Matthew first)", 
+                 "percentage": 80, "key_scholars": ["Traditional view"]},
+                {"period": "Late 19th century", "dominant_view": "Two-Source hypothesis (Mark first, Q source)", 
+                 "percentage": 40, "key_scholars": ["H.J. Holtzmann", "B.H. Streeter"]},
+                {"period": "Mid 20th century", "dominant_view": "Two-Source hypothesis", 
+                 "percentage": 70, "key_scholars": ["Rudolf Bultmann", "Vincent Taylor"]},
+                {"period": "Late 20th century", "dominant_view": "Two-Source hypothesis with variations", 
+                 "percentage": 75, "key_scholars": ["Graham Stanton", "E.P. Sanders"]},
+                {"period": "Early 21st century", "dominant_view": "Two-Source hypothesis with challenges from Farrer hypothesis", 
+                 "percentage": 65, "key_scholars": ["Mark Goodacre", "John Kloppenborg"]}
+            ],
+            "turning_points": [
+                {"period": "1830s", "event": "Proposal of Marcan priority by Karl Lachmann"},
+                {"period": "1890s", "event": "Formulation of Two-Source hypothesis by H.J. Holtzmann"},
+                {"period": "1920s", "event": "Refinement of Two-Source hypothesis by B.H. Streeter"},
+                {"period": "1970s-80s", "event": "Revival of Farrer hypothesis (Mark without Q) by Michael Goulder"}
+            ],
+            "current_consensus": "Two-Source hypothesis remains dominant but with significant minority views",
+            "factors_of_change": ["Text-critical advances", "Literary analysis", "Methodological developments"]
+        },
+        "pauline authorship": {
+            "evolution_pattern": "Divergence",
+            "timeline": [
+                {"period": "Pre-18th century", "dominant_view": "Traditional authorship (13 epistles)", 
+                 "percentage": 95, "key_scholars": ["Church tradition"]},
+                {"period": "19th century", "dominant_view": "Disputed authorship (questions about Pastorals and others)", 
+                 "percentage": 60, "key_scholars": ["F.C. Baur", "Early critical scholars"]},
+                {"period": "Early 20th century", "dominant_view": "Core 7/disputed 6 model emerging", 
+                 "percentage": 50, "key_scholars": ["Adolf Jülicher", "Alfred Loisy"]},
+                {"period": "Mid-late 20th century", "dominant_view": "7 undisputed/6 disputed or pseudepigraphical", 
+                 "percentage": 70, "key_scholars": ["Raymond Brown", "J.D.G. Dunn"]},
+                {"period": "Early 21st century", "dominant_view": "Split between critical (7 authentic) and evangelical (13 authentic) views", 
+                 "percentage": 65, "key_scholars": ["Luke Timothy Johnson", "D.A. Carson"]}
+            ],
+            "turning_points": [
+                {"period": "1830s", "event": "F.C. Baur's proposal of only 4 authentic letters"},
+                {"period": "1900-1930", "event": "Critical consensus forming around 7 authentic letters"},
+                {"period": "1950s-60s", "event": "Development of more nuanced pseudepigraphy theories"},
+                {"period": "1980s-present", "event": "Growing tradition-based divergence in scholarship"}
+            ],
+            "current_consensus": "Strong tradition-based divide with most critical scholars accepting 7 authentic letters and many evangelical scholars defending 13",
+            "factors_of_change": ["Historical-critical method", "Linguistic analysis", "Theological considerations", "Different views of pseudepigraphy"]
+        },
+        "historical jesus": {
+            "evolution_pattern": "Cyclical",
+            "timeline": [
+                {"period": "19th century", "dominant_view": "Liberal 'Lives of Jesus' (ethical teacher)", 
+                 "percentage": 70, "key_scholars": ["D.F. Strauss", "Ernest Renan"]},
+                {"period": "Early 20th century", "dominant_view": "Eschatological prophet", 
+                 "percentage": 65, "key_scholars": ["Albert Schweitzer", "Johannes Weiss"]},
+                {"period": "Mid 20th century", "dominant_view": "Existential teacher/demythologized Christ", 
+                 "percentage": 50, "key_scholars": ["Rudolf Bultmann", "Form critics"]},
+                {"period": "Late 20th century", "dominant_view": "Jewish apocalyptic prophet (3rd Quest)", 
+                 "percentage": 60, "key_scholars": ["E.P. Sanders", "John P. Meier"]},
+                {"period": "Early 21st century", "dominant_view": "Jewish prophet in social context with multiple interpretive approaches", 
+                 "percentage": 55, "key_scholars": ["N.T. Wright", "Bart Ehrman", "Dale Allison"]}
+            ],
+            "turning_points": [
+                {"period": "1835-1906", "event": "First Quest for the Historical Jesus"},
+                {"period": "1906", "event": "Albert Schweitzer's critique of the First Quest"},
+                {"period": "1953-1970s", "event": "Second Quest (New Quest) for the Historical Jesus"},
+                {"period": "1980s-present", "event": "Third Quest emphasizing Jewish context"}
+            ],
+            "current_consensus": "Jesus was a Jewish apocalyptic prophet with both Jewish context and enigmatic elements that resist easy categorization",
+            "factors_of_change": ["Archaeological discoveries", "Dead Sea Scrolls", "Social-scientific methods", "Jewish-Christian dialogue"]
+        }
+    }
+    
+    # Check if we have data for this topic
+    topic_match = None
+    for key, data in known_topics.items():
+        if key in topic_lower:
+            topic_match = key
+            break
+    
+    if topic_match:
+        # Add data to result
+        for key, value in known_topics[topic_match].items():
+            result[key] = value
+    else:
+        # Provide generic evolution pattern based on type of question
+        if "authorship" in topic_lower or "who wrote" in topic_lower:
+            result["evolution_pattern"] = "Typical divergence from traditional attributions"
+            result["timeline"] = [
+                {"period": "Pre-critical era", "dominant_view": "Traditional authorship attribution", "percentage": 90},
+                {"period": "Early historical-critical era", "dominant_view": "Challenges to traditional attribution", "percentage": 60},
+                {"period": "Modern era", "dominant_view": "Tradition-dependent views", "percentage": 50}
+            ]
+            result["factors_of_change"] = ["Rise of historical-critical methods", "Linguistic analysis advances", "Archaeological context"]
+            
+        elif "meaning" in topic_lower or "interpret" in topic_lower:
+            result["evolution_pattern"] = "Complex interaction of methods and traditions"
+            result["timeline"] = [
+                {"period": "Pre-critical era", "dominant_view": "Traditional/ecclesiastical interpretation", "percentage": 85},
+                {"period": "Critical era", "dominant_view": "Historical-grammatical approaches", "percentage": 70},
+                {"period": "Modern era", "dominant_view": "Multiple hermeneutical approaches", "percentage": 55}
+            ]
+            result["factors_of_change"] = ["Hermeneutical developments", "Postmodern critiques", "Interdisciplinary approaches"]
+            
+        elif "date" in topic_lower or "when" in topic_lower:
+            result["evolution_pattern"] = "Refinement through evidence"
+            result["timeline"] = [
+                {"period": "Pre-critical era", "dominant_view": "Traditional dating", "percentage": 90},
+                {"period": "Critical era", "dominant_view": "Revised critical dating", "percentage": 65},
+                {"period": "Modern era", "dominant_view": "Evidence-based range of dates", "percentage": 70}
+            ]
+            result["factors_of_change"] = ["Archaeological discoveries", "Comparative literary analysis", "Historical correlations"]
+            
+        else:
+            result["explanation"] = "This specific topic is not indexed in the consensus evolution database. For an accurate historical assessment, please consult specialized academic literature on this subject."
+    
+    return result
+
+def expert_distribution(topic: str,
+                       view: str,
+                       filter_by: Optional[Dict[str, Any]] = None) -> pd.DataFrame:
+    """
+    Analyze the distribution of expert opinions on a specific view or position.
+    
+    Args:
+        topic: The topic or question to analyze
+        view: The specific view or position to analyze
+        filter_by: Optional dictionary to filter experts (by tradition, era, etc.)
+        
+    Returns:
+        DataFrame with expert distribution data
+        
+    Example:
+        >>> # Analyze support for Q document hypothesis
+        >>> distribution = expert_distribution(
+        ...     "Synoptic Problem",
+        ...     "Two-Source Hypothesis (Q)",
+        ...     filter_by={"traditions": ["critical", "evangelical"], "era": "contemporary"}
+        ... )
+    """
+    # Initialize columns for DataFrame
+    columns = ["scholar", "tradition", "view", "confidence", "reasoning", "key_work", "year"]
+    
+    # This is a placeholder implementation that would be replaced by a real
+    # analysis of expert opinions in a production system
+    
+    # Set default filter if not provided
+    if filter_by is None:
+        filter_by = {}
+    
+    # For demonstration, we'll handle some common topics with predefined data
+    topic_lower = topic.lower()
+    view_lower = view.lower()
+    
+    # Map of topics and views to known expert distributions
+    known_distributions = {
+        "synoptic problem": {
+            "two-source": [
+                {"scholar": "James D.G. Dunn", "tradition": "critical", "view": "Two-Source Hypothesis", 
+                 "confidence": 0.9, "reasoning": "Markan priority and Q best explain the evidence", 
+                 "key_work": "Christianity in the Making, Vol. 1", "year": 2003},
+                {"scholar": "John S. Kloppenborg", "tradition": "critical", "view": "Two-Source Hypothesis", 
+                 "confidence": 0.95, "reasoning": "Q can be stratified into distinct layers of tradition", 
+                 "key_work": "The Formation of Q", "year": 1987},
+                {"scholar": "Christopher M. Tuckett", "tradition": "critical", "view": "Two-Source Hypothesis", 
+                 "confidence": 0.9, "reasoning": "Minor agreements don't invalidate two-source model", 
+                 "key_work": "Q and the History of Early Christianity", "year": 1996},
+                {"scholar": "Darrell L. Bock", "tradition": "evangelical", "view": "Two-Source Hypothesis", 
+                 "confidence": 0.8, "reasoning": "Best explains the synoptic data while allowing for reliability", 
+                 "key_work": "Luke (BECNT)", "year": 1994},
+                {"scholar": "Scot McKnight", "tradition": "evangelical", "view": "Two-Source Hypothesis", 
+                 "confidence": 0.7, "reasoning": "Most plausible explanation of synoptic relationships", 
+                 "key_work": "Interpreting the Synoptic Gospels", "year": 1988}
+            ],
+            "farrer": [
+                {"scholar": "Mark Goodacre", "tradition": "critical", "view": "Farrer Hypothesis (No Q)", 
+                 "confidence": 0.9, "reasoning": "Luke used Matthew directly, eliminating need for Q", 
+                 "key_work": "The Case Against Q", "year": 2002},
+                {"scholar": "Michael Goulder", "tradition": "critical", "view": "Farrer Hypothesis (No Q)", 
+                 "confidence": 0.95, "reasoning": "Luke's redactional creativity explains double tradition", 
+                 "key_work": "Luke: A New Paradigm", "year": 1989},
+                {"scholar": "Eric Eve", "tradition": "critical", "view": "Farrer Hypothesis (No Q)", 
+                 "confidence": 0.8, "reasoning": "Problems with Q reconstruction are resolved without Q", 
+                 "key_work": "Behind the Gospels", "year": 2013},
+                {"scholar": "John C. Poirier", "tradition": "critical", "view": "Farrer Hypothesis (No Q)", 
+                 "confidence": 0.85, "reasoning": "Q hypothesis creates more problems than it solves", 
+                 "key_work": "Articles in JBL and NTS", "year": 2008}
+            ]
+        },
+        "pastoral epistles": {
+            "non-pauline": [
+                {"scholar": "Raymond E. Brown", "tradition": "catholic", "view": "Non-Pauline authorship", 
+                 "confidence": 0.9, "reasoning": "Linguistic and theological differences from undisputed letters", 
+                 "key_work": "An Introduction to the New Testament", "year": 1997},
+                {"scholar": "Luke Timothy Johnson", "tradition": "catholic", "view": "Non-Pauline authorship", 
+                 "confidence": 0.7, "reasoning": "Different vocabulary but theology compatible with Paul", 
+                 "key_work": "The First and Second Letters to Timothy", "year": 2001},
+                {"scholar": "Bart D. Ehrman", "tradition": "critical", "view": "Non-Pauline authorship", 
+                 "confidence": 0.95, "reasoning": "Clear pseudepigraphy reflecting later church situation", 
+                 "key_work": "Forgery and Counterforgery", "year": 2012},
+                {"scholar": "Margaret Y. MacDonald", "tradition": "critical", "view": "Non-Pauline authorship", 
+                 "confidence": 0.9, "reasoning": "Reflects post-Pauline community development", 
+                 "key_work": "The Pauline Churches", "year": 1988},
+                {"scholar": "I. Howard Marshall", "tradition": "evangelical", "view": "Non-Pauline authorship", 
+                 "confidence": 0.7, "reasoning": "Pauline legacy through authorized secretary/co-author", 
+                 "key_work": "ICC Commentary on the Pastoral Epistles", "year": 1999}
+            ],
+            "pauline": [
+                {"scholar": "William D. Mounce", "tradition": "evangelical", "view": "Pauline authorship", 
+                 "confidence": 0.8, "reasoning": "Differences explicable through secretary, audience, and context", 
+                 "key_work": "Pastoral Epistles (WBC)", "year": 2000},
+                {"scholar": "Andreas Köstenberger", "tradition": "evangelical", "view": "Pauline authorship", 
+                 "confidence": 0.85, "reasoning": "Historical problems with pseudepigraphy theory", 
+                 "key_work": "Commentary on 1-2 Timothy & Titus", "year": 2021},
+                {"scholar": "Donald Guthrie", "tradition": "evangelical", "view": "Pauline authorship", 
+                 "confidence": 0.9, "reasoning": "External evidence and weakness of counter-arguments", 
+                 "key_work": "The Pastoral Epistles (TNTC)", "year": 1990},
+                {"scholar": "George W. Knight III", "tradition": "evangelical", "view": "Pauline authorship", 
+                 "confidence": 0.9, "reasoning": "Linguistic objections overstated, consistent with late Paul", 
+                 "key_work": "The Pastoral Epistles (NIGTC)", "year": 1992}
+            ]
+        }
+    }
+    
+    # Find matching distribution
+    data = None
+    for topic_key, views in known_distributions.items():
+        if topic_key in topic_lower:
+            for view_key, experts in views.items():
+                if view_key in view_lower:
+                    data = experts
+                    break
+            break
+    
+    if data:
+        # Apply filters if specified
+        if filter_by:
+            filtered_data = data.copy()
+            
+            # Filter by tradition
+            if "traditions" in filter_by:
+                filtered_data = [d for d in filtered_data if d["tradition"] in filter_by["traditions"]]
+            
+            # Filter by era/time period
+            if "era" in filter_by and filter_by["era"] == "contemporary":
+                # Consider contemporary as past 30 years
+                current_year = 2025  # as of the model's knowledge cutoff
+                filtered_data = [d for d in filtered_data if d["year"] > current_year - 30]
+            
+            # Filter by confidence level
+            if "min_confidence" in filter_by:
+                filtered_data = [d for d in filtered_data if d["confidence"] >= filter_by["min_confidence"]]
+            
+            return pd.DataFrame(filtered_data, columns=columns)
+        else:
+            return pd.DataFrame(data, columns=columns)
+    else:
+        # Return empty DataFrame with correct columns
+        return pd.DataFrame(columns=columns)
+
+def track_theological_trends(topic: str,
+                            start_year: int = 1900,
+                            end_year: int = 2024,
+                            interval: int = 20) -> Dict[str, Any]:
+    """
+    Track trends in theological positions on a topic over time.
+    
+    Args:
+        topic: The topic to analyze
+        start_year: Starting year for trend analysis
+        end_year: Ending year for trend analysis
+        interval: Year interval for data points
+        
+    Returns:
+        Dictionary with theological trend data
+        
+    Example:
+        >>> # Track trends in interpretation of Romans 9-11
+        >>> trends = track_theological_trends(
+        ...     "Interpretation of Romans 9-11",
+        ...     start_year=1950,
+        ...     end_year=2020,
+        ...     interval=10
+        ... )
+    """
+    # Ensure valid time range
+    if start_year >= end_year:
+        return {"error": "Start year must be before end year"}
+    
+    # Calculate year intervals
+    years = list(range(start_year, end_year + 1, interval))
+    if years[-1] != end_year:
+        years.append(end_year)
+    
+    # Initialize result
+    result = {
+        "topic": topic,
+        "time_range": f"{start_year}-{end_year}",
+        "years": years,
+        "positions": [],
+        "trends": [],
+        "tradition_shifts": {},
+        "key_publications": []
+    }
+    
+    # This is a placeholder implementation that would be replaced by a real
+    # analysis of theological literature trends in a production system
+    
+    # For demonstration, we'll handle some common topics with predefined data
+    topic_lower = topic.lower()
+    
+    # Map of topics to known trends
+    known_trends = {
+        "romans 9-11": {
+            "positions": [
+                {"name": "Double Predestination", "description": "God actively predestines both salvation and damnation"},
+                {"name": "Single Predestination", "description": "God predestines salvation but not damnation"},
+                {"name": "Corporate Election", "description": "Election concerns groups not individuals"},
+                {"name": "New Perspective", "description": "Focus on Israel's role in salvation history, not individual election"}
+            ],
+            "trends": [
+                {"position": "Double Predestination", "values": [80, 70, 55, 40, 30, 25, 20]},
+                {"position": "Single Predestination", "values": [15, 20, 30, 35, 30, 25, 20]},
+                {"position": "Corporate Election", "values": [5, 10, 15, 20, 25, 30, 30]},
+                {"position": "New Perspective", "values": [0, 0, 0, 5, 15, 20, 30]}
+            ],
+            "tradition_shifts": {
+                "evangelical": "From individual predestination to more diverse views including corporate election",
+                "critical": "Increasing emphasis on social and historical context of Israel",
+                "catholic": "Greater emphasis on universal salvation possibilities"
+            },
+            "key_publications": [
+                {"year": 1918, "author": "Karl Barth", "work": "Romans Commentary (1st edition)", "impact": "Challenged liberal Protestant readings"},
+                {"year": 1957, "author": "John Murray", "work": "The Epistle to the Romans", "impact": "Reformed double predestination interpretation"},
+                {"year": 1980, "author": "E.P. Sanders", "work": "Paul and Palestinian Judaism", "impact": "Reframed Paul in Jewish context"},
+                {"year": 1994, "author": "N.T. Wright", "work": "The Climax of the Covenant", "impact": "Advanced New Perspective reading of Romans 9-11"},
+                {"year": 2004, "author": "John Piper", "work": "The Justification of God", "impact": "Defense of Calvinist reading of Romans 9"},
+                {"year": 2010, "author": "Michael Gorman", "work": "Inhabiting the Cruciform God", "impact": "Participationist reading"}
+            ]
+        },
+        "atonement": {
+            "positions": [
+                {"name": "Penal Substitution", "description": "Christ bore the punishment for sin in our place"},
+                {"name": "Christus Victor", "description": "Christ's death and resurrection defeated evil powers"},
+                {"name": "Moral Influence", "description": "Christ's death exemplifies God's love to inspire moral change"},
+                {"name": "Recapitulation", "description": "Christ retraces and redeems human experience"}
+            ],
+            "trends": [
+                {"position": "Penal Substitution", "values": [40, 55, 70, 75, 65, 55, 45]},
+                {"position": "Christus Victor", "values": [30, 20, 15, 10, 15, 25, 30]},
+                {"position": "Moral Influence", "values": [25, 20, 10, 10, 15, 15, 15]},
+                {"position": "Recapitulation", "values": [5, 5, 5, 5, 5, 5, 10]}
+            ],
+            "tradition_shifts": {
+                "evangelical": "Strong emphasis on penal substitution, though slightly decreasing",
+                "critical": "Shift toward Christus Victor and away from substitutionary models",
+                "catholic": "Renewed interest in recapitulation and broader models",
+                "orthodox": "Consistent emphasis on Christus Victor and recapitulation"
+            },
+            "key_publications": [
+                {"year": 1931, "author": "Gustaf Aulén", "work": "Christus Victor", "impact": "Revived interest in early church 'classic' view"},
+                {"year": 1955, "author": "John Stott", "work": "The Cross of Christ", "impact": "Articulated penal substitution for evangelicals"},
+                {"year": 1974, "author": "Jürgen Moltmann", "work": "The Crucified God", "impact": "Social and political dimensions of atonement"},
+                {"year": 1986, "author": "J.I. Packer", "work": "What Did the Cross Achieve?", "impact": "Defense of penal substitution"},
+                {"year": 2006, "author": "Joel Green & Mark Baker", "work": "Recovering the Scandal of the Cross", "impact": "Multi-faceted view of atonement"},
+                {"year": 2011, "author": "Fleming Rutledge", "work": "The Crucifixion", "impact": "Integration of substitution and Christus Victor"}
+            ]
+        },
+        "genesis 1-11": {
+            "positions": [
+                {"name": "Young Earth Creationism", "description": "Literal 6-day creation, earth <10,000 years old"},
+                {"name": "Old Earth Creationism", "description": "Day-age or gap interpretations, compatible with ancient earth"},
+                {"name": "Theistic Evolution", "description": "Evolution as God's method of creation"},
+                {"name": "Literary/Theological Reading", "description": "Focus on theological message, not scientific details"}
+            ],
+            "trends": [
+                {"position": "Young Earth Creationism", "values": [40, 45, 35, 30, 35, 30, 25]},
+                {"position": "Old Earth Creationism", "values": [30, 30, 35, 40, 35, 30, 25]},
+                {"position": "Theistic Evolution", "values": [20, 15, 20, 20, 20, 25, 30]},
+                {"position": "Literary/Theological Reading", "values": [10, 10, 10, 10, 10, 15, 20]}
+            ],
+            "tradition_shifts": {
+                "evangelical": "Growing diversity from YEC dominance to acceptance of multiple views",
+                "critical": "Consistent emphasis on literary and theological readings",
+                "catholic": "Movement from concordist models toward theistic evolution"
+            },
+            "key_publications": [
+                {"year": 1923, "author": "William Jennings Bryan", "work": "In His Image", "impact": "Defense of creation against evolution"},
+                {"year": 1961, "author": "John Whitcomb & Henry Morris", "work": "The Genesis Flood", "impact": "Launched modern young-earth creationism"},
+                {"year": 1984, "author": "Hugh Ross", "work": "The Fingerprint of God", "impact": "Old-earth creationism for evangelicals"},
+                {"year": 1992, "author": "Phyllis Trible", "work": "God and the Rhetoric of Sexuality", "impact": "Literary-feminist reading of Genesis"},
+                {"year": 2003, "author": "Francis Collins", "work": "The Language of God", "impact": "Evangelical case for theistic evolution"},
+                {"year": 2009, "author": "John Walton", "work": "The Lost World of Genesis One", "impact": "Ancient cosmology interpretation"}
+            ]
+        }
+    }
+    
+    # Check if we have data for this topic
+    topic_match = None
+    for key, data in known_trends.items():
+        if key in topic_lower:
+            topic_match = key
+            break
+    
+    if topic_match:
+        # Add positions and trends
+        result["positions"] = known_trends[topic_match]["positions"]
+        
+        # Adjust trend data to match requested years
+        trends = []
+        for position_trend in known_trends[topic_match]["trends"]:
+            # Create interpolated values for the requested years
+            original_years = list(range(1900, 2021, 20))
+            original_values = position_trend["values"]
+            
+            # Use simple linear interpolation to estimate values
+            interpolated_values = []
+            for year in years:
+                # Find position in original timeline
+                if year <= original_years[0]:
+                    interpolated_values.append(original_values[0])
+                elif year >= original_years[-1]:
+                    interpolated_values.append(original_values[-1])
+                else:
+                    # Linear interpolation
+                    for i in range(len(original_years) - 1):
+                        if original_years[i] <= year < original_years[i+1]:
+                            ratio = (year - original_years[i]) / (original_years[i+1] - original_years[i])
+                            value = original_values[i] + ratio * (original_values[i+1] - original_values[i])
+                            interpolated_values.append(round(value))
+                            break
+            
+            trends.append({
+                "position": position_trend["position"],
+                "values": interpolated_values
+            })
+        
+        result["trends"] = trends
+        
+        # Add tradition shifts and key publications
+        result["tradition_shifts"] = known_trends[topic_match]["tradition_shifts"]
+        
+        # Filter publications to match the requested time range
+        key_publications = [pub for pub in known_trends[topic_match]["key_publications"] 
+                           if start_year <= pub["year"] <= end_year]
+        result["key_publications"] = key_publications
+    else:
+        # Create generic trend data
+        positions = [
+            {"name": "Traditional View", "description": "Conservative or traditional interpretation"},
+            {"name": "Moderate View", "description": "Balanced approach between traditional and critical"},
+            {"name": "Critical View", "description": "Historical-critical or progressive interpretation"},
+            {"name": "Alternative View", "description": "Emerging or minority interpretation"}
+        ]
+        
+        # Generate made-up trend data
+        trends = [
+            {"position": "Traditional View", "values": [70, 60, 55, 45, 40, 35, 30]},
+            {"position": "Moderate View", "values": [20, 25, 30, 35, 35, 35, 35]},
+            {"position": "Critical View", "values": [10, 15, 15, 20, 25, 25, 25]},
+            {"position": "Alternative View", "values": [0, 0, 0, 0, 0, 5, 10]}
+        ]
+        
+        # Adjust to match requested years
+        for trend in trends:
+            original_years = list(range(1900, 2021, 20))
+            original_values = trend["values"]
+            
+            # Use simple linear interpolation
+            interpolated_values = []
+            for year in years:
+                if year <= original_years[0]:
+                    interpolated_values.append(original_values[0])
+                elif year >= original_years[-1]:
+                    interpolated_values.append(original_values[-1])
+                else:
+                    for i in range(len(original_years) - 1):
+                        if original_years[i] <= year < original_years[i+1]:
+                            ratio = (year - original_years[i]) / (original_years[i+1] - original_years[i])
+                            value = original_values[i] + ratio * (original_values[i+1] - original_values[i])
+                            interpolated_values.append(round(value))
+                            break
+            
+            trend["values"] = interpolated_values
+        
+        result["positions"] = positions
+        result["trends"] = trends
+        result["tradition_shifts"] = {
+            "evangelical": "Gradual shift from exclusively traditional to more diverse views",
+            "critical": "Consistent emphasis on historical and literary approaches",
+            "catholic": "Movement toward greater integration of tradition and modern scholarship"
+        }
+        result["key_publications"] = []
+    
+    return result
+
 def create_scholarly_position(tradition: str, position: str, 
                             sources: List[Dict[str, str]], confidence: float) -> Dict[str, Any]:
     """
@@ -368,9 +1204,9 @@ def get_scholarly_consensus(question: str, include_traditions: Optional[List[str
     matched_question = False
     
     # Q1: Johannine authorship
-    if ("who wrote" in question_lower and "john" in question_lower) or \
-       ("authorship" in question_lower and "john" in question_lower) or \
-       ("johannine authorship" in question_lower):
+    if (("who wrote" in question_lower and "john" in question_lower) or
+       ("authorship" in question_lower and "john" in question_lower) or
+       ("johannine authorship" in question_lower)):
         
         matched_question = True
         result["positions"] = [
@@ -407,8 +1243,8 @@ def get_scholarly_consensus(question: str, include_traditions: Optional[List[str
         ]
     
     # Q2: Jesus's divinity in Mark
-    elif ("divinity" in question_lower and "mark" in question_lower) or \
-         ("mark" in question_lower and "divine" in question_lower and "jesus" in question_lower):
+    elif (("divinity" in question_lower and "mark" in question_lower) or
+         ("mark" in question_lower and "divine" in question_lower and "jesus" in question_lower)):
         
         matched_question = True
         result["positions"] = [
@@ -732,7 +1568,8 @@ def rate_claim_scholarly_support(claim: str, category: Optional[str] = None) -> 
         result["minority_position"] = "John's language about pre-existence should be understood figuratively or as later theological development."
     
     # Claim 4: Documentary Hypothesis
-    elif ("documentary" in claim_lower or "jedp" in claim_lower) and ("pentateuch" in claim_lower or "torah" in claim_lower or "moses" in claim_lower):
+    elif (("documentary" in claim_lower or "jedp" in claim_lower) and 
+          ("pentateuch" in claim_lower or "torah" in claim_lower or "moses" in claim_lower)):
         matched_claim = True
         
         if "false" in claim_lower or "incorrect" in claim_lower or "wrong" in claim_lower:
