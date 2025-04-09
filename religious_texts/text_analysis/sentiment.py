@@ -1,786 +1,462 @@
 """
 Sentiment Analysis Module
 
-This module provides functions for analyzing sentiment and emotions in biblical texts.
+This module provides functions for analyzing the sentiment and emotional content
+of biblical passages, which can help understand the tone, emotional appeals, and
+rhetorical strategies used in different texts.
 """
 
 import re
 from collections import Counter, defaultdict
 from typing import Dict, List, Optional, Union, Any, Tuple, Set
 
-import numpy as np
 import pandas as pd
+import numpy as np
 from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.sentiment import SentimentIntensityAnalyzer
+from textblob import TextBlob
 
-# Try to import optional dependencies
-try:
-    from textblob import TextBlob
-    HAS_TEXTBLOB = True
-except ImportError:
-    HAS_TEXTBLOB = False
-
-try:
-    from nltk.sentiment.vader import SentimentIntensityAnalyzer
-    HAS_VADER = True
-except ImportError:
-    HAS_VADER = False
-
-
-# Basic positive and negative word lexicons (can be extended)
-POSITIVE_WORDS = {
-    'love', 'joy', 'peace', 'hope', 'faith', 'good', 'righteous', 'blessed',
-    'holy', 'happy', 'glad', 'praise', 'mercy', 'grace', 'salvation', 'heaven',
-    'gentle', 'kind', 'comfort', 'strength', 'courage', 'wisdom', 'light',
-    'true', 'truth', 'pure', 'honor', 'glory', 'abundance', 'rejoice',
-    'forgive', 'forgiveness', 'life', 'prosperity', 'blessing', 'delight'
+# Define emotion and sentiment lexicons
+POSITIVE_LEXICON = {
+    "joy": ["joy", "rejoice", "glad", "delight", "happy", "blessed", "praise", "exalt", 
+           "thank", "gratitude", "celebrate", "honor", "glory", "peace"],
+    "love": ["love", "beloved", "compassion", "mercy", "kindness", "grace", "gentle",
+            "comfort", "care", "affection", "charity", "devoted"],
+    "hope": ["hope", "promise", "faith", "trust", "believe", "confidence", "assurance",
+            "salvation", "redemption", "renewal", "restore", "covenant"],
+    "moral_approval": ["righteous", "just", "holy", "pure", "good", "worthy", "noble",
+                     "true", "honest", "faithful", "virtue", "integrity", "honor"]
 }
 
-NEGATIVE_WORDS = {
-    'sin', 'evil', 'wicked', 'death', 'darkness', 'hell', 'fear', 'anger',
-    'hate', 'wrath', 'judgment', 'curse', 'punishment', 'sorrow', 'pain',
-    'suffering', 'affliction', 'trouble', 'enemy', 'war', 'blood', 'destroy',
-    'destruction', 'corrupt', 'false', 'deceit', 'grief', 'torment', 'weep',
-    'weeping', 'mourn', 'mourning', 'crime', 'transgression', 'guilt',
-    'condemnation', 'perish', 'disaster', 'calamity', 'famine', 'plague',
-    'disease', 'misery', 'shame', 'terror', 'horror', 'cruel', 'jealous',
-    'greed', 'bitter', 'betray', 'doom', 'dread', 'envy', 'strife', 'lust'
+NEGATIVE_LEXICON = {
+    "fear": ["fear", "afraid", "terror", "dread", "anxiety", "alarm", "panic", "horror",
+            "tremble", "fright", "scared", "apprehension", "worry"],
+    "anger": ["anger", "wrath", "fury", "rage", "indignation", "vengeance", "judgment", 
+             "rebuke", "condemn", "punish", "curse", "destroy"],
+    "sorrow": ["sorrow", "grief", "mourn", "weep", "lament", "sad", "distress", "affliction",
+              "suffering", "pain", "anguish", "broken", "tear"],
+    "moral_disapproval": ["sin", "evil", "wicked", "corrupt", "abomination", "unclean", "impure",
+                        "transgression", "iniquity", "wrong", "guilt", "shame", "disgrace"]
 }
 
-# Basic emotion categories with associated words
-EMOTION_LEXICON = {
-    'joy': {'joy', 'happy', 'glad', 'rejoice', 'delight', 'pleasure', 'merry', 'cheerful'},
-    'sadness': {'sad', 'sorrow', 'grief', 'mourn', 'weep', 'lament', 'distress', 'despair'},
-    'anger': {'anger', 'wrath', 'fury', 'rage', 'indignation', 'vengeance', 'fierce'},
-    'fear': {'fear', 'afraid', 'terror', 'dread', 'horror', 'alarm', 'panic', 'trembling'},
-    'love': {'love', 'beloved', 'loving', 'affection', 'fond', 'care', 'cherish'},
-    'hate': {'hate', 'hatred', 'despise', 'abhor', 'loathe', 'detest', 'scorn'},
-    'surprise': {'amaze', 'astonish', 'wonder', 'marvel', 'awe', 'astound', 'startled'},
-    'disgust': {'abomination', 'disgust', 'loathsome', 'revulsion', 'abhor', 'repulsive', 'vile'},
-    'shame': {'shame', 'ashamed', 'embarrass', 'humiliate', 'disgrace', 'dishonor'},
-    'peace': {'peace', 'calm', 'tranquil', 'quiet', 'rest', 'serene', 'still'},
-    'hope': {'hope', 'expect', 'anticipate', 'trust', 'confidence', 'faith', 'assurance'}
-}
-
-
-def _extract_sentences(bible_dict: Dict[str, Any], book: Optional[str] = None, 
-                      chapter: Optional[int] = None, verse: Optional[int] = None) -> List[Dict[str, Any]]:
+def analyze_passage_sentiment(text: str, detailed: bool = False) -> Dict[str, Any]:
     """
-    Helper function to extract sentences with their references from a Bible dictionary.
+    Analyze the sentiment and emotional content of a biblical passage.
+    
+    Args:
+        text: The text to analyze
+        detailed: Whether to return detailed emotion analysis
+        
+    Returns:
+        Dictionary with sentiment analysis results
+        
+    Example:
+        >>> # Analyze sentiment of Psalm 23
+        >>> psalm23 = "The LORD is my shepherd; I shall not want..."
+        >>> sentiment = analyze_passage_sentiment(psalm23, detailed=True)
+        >>> print(sentiment["compound_score"])
+    """
+    # Initialize NLTK's VADER sentiment analyzer
+    sia = SentimentIntensityAnalyzer()
+    
+    # Get basic sentiment scores
+    scores = sia.polarity_scores(text)
+    
+    # Initialize result
+    result = {
+        "compound_score": scores["compound"],
+        "positive_score": scores["pos"],
+        "negative_score": scores["neg"],
+        "neutral_score": scores["neu"],
+        "overall_sentiment": "positive" if scores["compound"] >= 0.05 else 
+                           "negative" if scores["compound"] <= -0.05 else "neutral"
+    }
+    
+    # Return basic analysis if not detailed
+    if not detailed:
+        return result
+    
+    # Tokenize text
+    tokens = [token.lower() for token in word_tokenize(text)]
+    
+    # Analyze emotions using lexicons
+    emotions = {}
+    
+    # Count positive emotions
+    for emotion, terms in POSITIVE_LEXICON.items():
+        count = sum(tokens.count(term) for term in terms)
+        emotions[emotion] = count
+    
+    # Count negative emotions
+    for emotion, terms in NEGATIVE_LEXICON.items():
+        count = sum(tokens.count(term) for term in terms)
+        emotions[emotion] = count
+    
+    # Calculate dominant emotions
+    if emotions:
+        max_emotion = max(emotions.items(), key=lambda x: x[1])
+        
+        if max_emotion[1] > 0:
+            dominant_emotion = max_emotion[0]
+        else:
+            dominant_emotion = "neutral"
+    else:
+        dominant_emotion = "neutral"
+    
+    # Get sentence-level analysis
+    sentences = sent_tokenize(text)
+    sentence_analysis = []
+    
+    for sent in sentences:
+        sent_scores = sia.polarity_scores(sent)
+        
+        # Create TextBlob for subjectivity
+        blob = TextBlob(sent)
+        
+        sent_emotions = {}
+        sent_tokens = [token.lower() for token in word_tokenize(sent)]
+        
+        # Count emotions in sentence
+        for category in POSITIVE_LEXICON:
+            terms = POSITIVE_LEXICON[category]
+            count = sum(sent_tokens.count(term) for term in terms)
+            sent_emotions[category] = count
+        
+        for category in NEGATIVE_LEXICON:
+            terms = NEGATIVE_LEXICON[category]
+            count = sum(sent_tokens.count(term) for term in terms)
+            sent_emotions[category] = count
+        
+        # Add to sentence analysis
+        sentence_analysis.append({
+            "text": sent,
+            "compound_score": sent_scores["compound"],
+            "positive_score": sent_scores["pos"],
+            "negative_score": sent_scores["neg"],
+            "neutral_score": sent_scores["neu"],
+            "subjectivity": blob.sentiment.subjectivity,
+            "emotions": sent_emotions
+        })
+    
+    # Add detailed results
+    result["emotions"] = emotions
+    result["dominant_emotion"] = dominant_emotion
+    result["sentence_analysis"] = sentence_analysis
+    result["subjectivity"] = sum(s["subjectivity"] for s in sentence_analysis) / len(sentence_analysis) if sentence_analysis else 0
+    
+    return result
+
+def compare_passage_sentiments(passages: List[Dict[str, str]]) -> pd.DataFrame:
+    """
+    Compare sentiment and emotional content across multiple passages.
+    
+    Args:
+        passages: List of dictionaries with passage information
+        
+    Returns:
+        DataFrame with comparative sentiment analysis
+        
+    Example:
+        >>> # Compare sentiments across beatitudes and woes
+        >>> passages = [
+        ...     {"label": "Beatitudes", "text": "Blessed are the poor in spirit..."},
+        ...     {"label": "Woes", "text": "Woe to you, scribes and Pharisees..."}
+        ... ]
+        >>> comparison = compare_passage_sentiments(passages)
+    """
+    # Initialize results
+    results = []
+    
+    # Process each passage
+    for passage in passages:
+        label = passage.get("label", "Unnamed")
+        text = passage.get("text", "")
+        reference = passage.get("reference", "")
+        
+        if not text:
+            continue
+        
+        # Get sentiment analysis
+        sentiment = analyze_passage_sentiment(text, detailed=True)
+        
+        # Extract key metrics
+        result = {
+            "label": label,
+            "reference": reference,
+            "text_sample": text[:100] + "..." if len(text) > 100 else text,
+            "compound_score": sentiment["compound_score"],
+            "positive_score": sentiment["positive_score"],
+            "negative_score": sentiment["negative_score"],
+            "subjectivity": sentiment["subjectivity"],
+            "dominant_emotion": sentiment["dominant_emotion"]
+        }
+        
+        # Add emotion counts
+        for emotion, count in sentiment["emotions"].items():
+            result[f"emotion_{emotion}"] = count
+        
+        results.append(result)
+    
+    # Convert to DataFrame
+    if results:
+        df = pd.DataFrame(results)
+        
+        # Sort by compound score (descending)
+        df = df.sort_values("compound_score", ascending=False)
+    else:
+        # Create empty DataFrame with expected columns
+        columns = ["label", "reference", "text_sample", "compound_score", 
+                  "positive_score", "negative_score", "subjectivity", "dominant_emotion"]
+        df = pd.DataFrame(columns=columns)
+    
+    return df
+
+def analyze_sentiment_patterns(bible_dict: Dict[str, Any], 
+                             target_pattern: Optional[Dict[str, List[str]]] = None,
+                             books: Optional[List[str]] = None) -> pd.DataFrame:
+    """
+    Analyze sentiment patterns across biblical texts, optionally filtering by specific patterns.
     
     Args:
         bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
-        book: Optional book name to filter by
-        chapter: Optional chapter number to filter by
-        verse: Optional verse number to filter by
+        target_pattern: Optional dictionary mapping concepts to related terms for targeting analysis
+        books: Optional list of books to include
         
     Returns:
-        List of dictionaries, each containing a sentence and its reference
+        DataFrame with sentiment pattern analysis
+        
+    Example:
+        >>> bible = loaders.load_text("kjv.txt")
+        >>> # Analyze sentiment patterns in Jesus's teachings
+        >>> patterns = {"teaching": ["said", "teach", "taught", "speaks", "spoke"]}
+        >>> sentiment_patterns = analyze_sentiment_patterns(
+        ...     bible,
+        ...     target_pattern=patterns,
+        ...     books=["Matthew", "Mark", "Luke", "John"]
+        ... )
     """
-    sentences = []
+    results = []
     
     # Determine which books to include
-    if book:
-        if book not in bible_dict:
-            return []
-        books_to_check = {book: bible_dict[book]}
+    if books:
+        book_subset = {book: bible_dict[book] for book in books if book in bible_dict}
     else:
-        books_to_check = bible_dict
+        book_subset = bible_dict
     
-    # Extract sentences based on filters
-    for book_name, chapters in books_to_check.items():
-        # Filter by chapter
-        if chapter:
-            if chapter not in chapters:
-                continue
-            chapters_to_check = {chapter: chapters[chapter]}
-        else:
-            chapters_to_check = chapters
-        
-        for chapter_num, verses in chapters_to_check.items():
-            # Filter by verse
-            if verse:
-                if verse not in verses:
+    # Process each book
+    for book_name, chapters in book_subset.items():
+        for chapter_num, verses in chapters.items():
+            for verse_num, verse_text in verses.items():
+                # Skip empty verses
+                if not verse_text:
                     continue
-                verses_to_check = {verse: verses[verse]}
-            else:
-                verses_to_check = verses
-            
-            for verse_num, verse_text in verses_to_check.items():
-                # Split verse into sentences
-                verse_sentences = sent_tokenize(verse_text)
                 
-                for sentence in verse_sentences:
-                    sentences.append({
-                        'book': book_name,
-                        'chapter': chapter_num,
-                        'verse': verse_num,
-                        'text': sentence,
-                        'reference': f"{book_name} {chapter_num}:{verse_num}"
+                # Check if verse matches target pattern
+                pattern_match = False
+                matched_terms = []
+                
+                if target_pattern:
+                    verse_lower = verse_text.lower()
+                    
+                    for concept, terms in target_pattern.items():
+                        for term in terms:
+                            if term.lower() in verse_lower:
+                                pattern_match = True
+                                matched_terms.append(term)
+                
+                # If no pattern specified or pattern matched, analyze sentiment
+                if not target_pattern or pattern_match:
+                    # Get sentiment analysis
+                    sentiment = analyze_passage_sentiment(verse_text)
+                    
+                    # Add to results
+                    results.append({
+                        "book": book_name,
+                        "chapter": chapter_num,
+                        "verse": verse_num,
+                        "reference": f"{book_name} {chapter_num}:{verse_num}",
+                        "text": verse_text,
+                        "compound_score": sentiment["compound_score"],
+                        "sentiment": sentiment["overall_sentiment"],
+                        "pattern_match": pattern_match,
+                        "matched_terms": ", ".join(matched_terms) if matched_terms else None
                     })
     
-    return sentences
+    # Convert to DataFrame
+    if results:
+        df = pd.DataFrame(results)
+    else:
+        # Create empty DataFrame with expected columns
+        columns = ["book", "chapter", "verse", "reference", "text", 
+                  "compound_score", "sentiment", "pattern_match", "matched_terms"]
+        df = pd.DataFrame(columns=columns)
+    
+    return df
 
-
-def sentiment_analysis(bible_dict: Dict[str, Any], book: Optional[str] = None,
-                      chapter: Optional[int] = None, verse: Optional[int] = None,
-                      method: str = 'lexicon', unit: str = 'verse') -> pd.DataFrame:
+def analyze_sentiment_by_speaker(bible_dict: Dict[str, Any],
+                               speakers: Dict[str, List[str]],
+                               books: Optional[List[str]] = None) -> pd.DataFrame:
     """
-    Perform sentiment analysis on biblical texts.
+    Analyze sentiment patterns in text attributed to different speakers.
     
     Args:
         bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
-        book: Optional book name to filter by
-        chapter: Optional chapter number to filter by
-        verse: Optional verse number to filter by
-        method: Sentiment analysis method ('lexicon', 'textblob', or 'vader')
-        unit: Unit of analysis ('verse', 'sentence', 'chapter', or 'book')
+        speakers: Dictionary mapping speaker labels to speech attribution terms
+        books: Optional list of books to include
         
     Returns:
-        DataFrame with sentiment scores for each unit
+        DataFrame with sentiment analysis by speaker
         
     Example:
         >>> bible = loaders.load_text("kjv.txt")
-        >>> # Analyze sentiment in Psalms
-        >>> sentiment = sentiment_analysis(bible, book="Psalms")
-        >>> # Get average sentiment by chapter
-        >>> chapter_avg = sentiment.groupby('chapter')['sentiment_score'].mean()
+        >>> # Compare sentiment in Jesus vs. Pharisees speech
+        >>> speakers = {
+        ...     "Jesus": ["Jesus said", "Jesus answered", "He said to them"],
+        ...     "Pharisees": ["Pharisees said", "they answered", "they asked him"]
+        ... }
+        >>> speaker_sentiment = analyze_sentiment_by_speaker(
+        ...     bible,
+        ...     speakers=speakers,
+        ...     books=["Matthew", "Mark", "Luke", "John"]
+        ... )
     """
-    # Define sentiment analysis function based on method
-    if method == 'lexicon':
-        def get_sentiment(text):
-            tokens = [token.lower() for token in word_tokenize(text)]
-            pos_count = sum(1 for token in tokens if token in POSITIVE_WORDS)
-            neg_count = sum(1 for token in tokens if token in NEGATIVE_WORDS)
-            total_count = pos_count + neg_count
-            
-            if total_count == 0:
-                return 0.0  # Neutral
-            
-            # Return sentiment score between -1 and 1
-            return (pos_count - neg_count) / total_count
+    from religious_texts.theological_analysis.speech import extract_speech_by_speaker
     
-    elif method == 'textblob':
-        if not HAS_TEXTBLOB:
-            raise ImportError("TextBlob is required for this method. Please install it with 'pip install textblob'.")
-        
-        def get_sentiment(text):
-            return TextBlob(text).sentiment.polarity
+    results = []
     
-    elif method == 'vader':
-        if not HAS_VADER:
-            raise ImportError("NLTK's VADER is required for this method. Please install it with 'pip install nltk' and run 'nltk.download(\"vader_lexicon\")'.")
+    # Extract speech for each speaker
+    for speaker_label, attribution_terms in speakers.items():
+        # Get speech attributed to this speaker
+        speech_df = extract_speech_by_speaker(bible_dict, attribution_terms, books=books)
         
-        # Initialize VADER analyzer
-        sia = SentimentIntensityAnalyzer()
+        if speech_df.empty:
+            continue
         
-        def get_sentiment(text):
-            scores = sia.polarity_scores(text)
-            return scores['compound']  # Compound score between -1 and 1
-    
-    else:
-        raise ValueError(f"Unknown method '{method}'. Choose from 'lexicon', 'textblob', or 'vader'.")
-    
-    # Process based on unit type
-    if unit == 'verse':
-        results = []
-        
-        # Determine which books to include
-        if book:
-            if book not in bible_dict:
-                return pd.DataFrame()
-            books_to_check = {book: bible_dict[book]}
-        else:
-            books_to_check = bible_dict
-        
-        # Process each verse
-        for book_name, chapters in books_to_check.items():
-            # Filter by chapter
-            if chapter:
-                if chapter not in chapters:
-                    continue
-                chapters_to_check = {chapter: chapters[chapter]}
-            else:
-                chapters_to_check = chapters
+        # Process each speech segment
+        for _, row in speech_df.iterrows():
+            # Get sentiment analysis
+            sentiment = analyze_passage_sentiment(row["speech_text"])
             
-            for chapter_num, verses in chapters_to_check.items():
-                # Filter by verse
-                if verse:
-                    if verse not in verses:
-                        continue
-                    verses_to_check = {verse: verses[verse]}
-                else:
-                    verses_to_check = verses
-                
-                for verse_num, verse_text in verses_to_check.items():
-                    # Calculate sentiment
-                    sentiment_score = get_sentiment(verse_text)
-                    
-                    results.append({
-                        'book': book_name,
-                        'chapter': chapter_num,
-                        'verse': verse_num,
-                        'text': verse_text,
-                        'sentiment_score': sentiment_score,
-                        'sentiment_category': 'positive' if sentiment_score > 0 else 
-                                             'negative' if sentiment_score < 0 else 'neutral',
-                        'reference': f"{book_name} {chapter_num}:{verse_num}"
-                    })
-    
-    elif unit == 'sentence':
-        # Extract sentences
-        sentences = _extract_sentences(bible_dict, book, chapter, verse)
-        
-        results = []
-        for sentence_info in sentences:
-            # Calculate sentiment
-            sentiment_score = get_sentiment(sentence_info['text'])
-            
-            sentence_info['sentiment_score'] = sentiment_score
-            sentence_info['sentiment_category'] = 'positive' if sentiment_score > 0 else 
-                                                'negative' if sentiment_score < 0 else 'neutral'
-            results.append(sentence_info)
-    
-    elif unit == 'chapter':
-        results = []
-        
-        # Determine which books to include
-        if book:
-            if book not in bible_dict:
-                return pd.DataFrame()
-            books_to_check = {book: bible_dict[book]}
-        else:
-            books_to_check = bible_dict
-        
-        # Process each chapter
-        for book_name, chapters in books_to_check.items():
-            # Filter by chapter
-            if chapter:
-                if chapter not in chapters:
-                    continue
-                chapters_to_check = {chapter: chapters[chapter]}
-            else:
-                chapters_to_check = chapters
-            
-            for chapter_num, verses in chapters_to_check.items():
-                # Combine all verses in the chapter
-                chapter_text = ' '.join(verse_text for verse_text in verses.values())
-                
-                # Calculate sentiment
-                sentiment_score = get_sentiment(chapter_text)
-                
-                results.append({
-                    'book': book_name,
-                    'chapter': chapter_num,
-                    'text': chapter_text[:100] + '...' if len(chapter_text) > 100 else chapter_text,
-                    'sentiment_score': sentiment_score,
-                    'sentiment_category': 'positive' if sentiment_score > 0 else 
-                                         'negative' if sentiment_score < 0 else 'neutral',
-                    'reference': f"{book_name} {chapter_num}"
-                })
-    
-    elif unit == 'book':
-        results = []
-        
-        # Determine which books to include
-        if book:
-            if book not in bible_dict:
-                return pd.DataFrame()
-            books_to_check = {book: bible_dict[book]}
-        else:
-            books_to_check = bible_dict
-        
-        # Process each book
-        for book_name, chapters in books_to_check.items():
-            # Combine all chapters and verses
-            book_text = ' '.join(
-                verse_text 
-                for chapter_verses in chapters.values() 
-                for verse_text in chapter_verses.values()
-            )
-            
-            # Calculate sentiment
-            sentiment_score = get_sentiment(book_text)
-            
+            # Add to results
             results.append({
-                'book': book_name,
-                'text': book_text[:100] + '...' if len(book_text) > 100 else book_text,
-                'sentiment_score': sentiment_score,
-                'sentiment_category': 'positive' if sentiment_score > 0 else 
-                                     'negative' if sentiment_score < 0 else 'neutral',
-                'reference': book_name
+                "speaker": speaker_label,
+                "book": row["book"],
+                "chapter": row["chapter"],
+                "verse": row["verse"],
+                "reference": row["reference"],
+                "speech_text": row["speech_text"],
+                "compound_score": sentiment["compound_score"],
+                "positive_score": sentiment["positive_score"],
+                "negative_score": sentiment["negative_score"],
+                "sentiment": sentiment["overall_sentiment"]
             })
     
-    else:
-        raise ValueError(f"Unknown unit '{unit}'. Choose from 'verse', 'sentence', 'chapter', or 'book'.")
-    
-    # Convert results to DataFrame
+    # Convert to DataFrame
     if results:
         df = pd.DataFrame(results)
     else:
         # Create empty DataFrame with expected columns
-        df = pd.DataFrame(columns=['book', 'chapter', 'verse', 'text', 
-                                 'sentiment_score', 'sentiment_category', 'reference'])
+        columns = ["speaker", "book", "chapter", "verse", "reference", "speech_text",
+                  "compound_score", "positive_score", "negative_score", "sentiment"]
+        df = pd.DataFrame(columns=columns)
     
     return df
 
-
-def emotion_detection(bible_dict: Dict[str, Any], book: Optional[str] = None,
-                     chapter: Optional[int] = None, verse: Optional[int] = None,
-                     custom_lexicon: Optional[Dict[str, Set[str]]] = None,
-                     unit: str = 'verse') -> pd.DataFrame:
+def get_sentiment_summary_by_book(bible_dict: Dict[str, Any],
+                                books: Optional[List[str]] = None) -> pd.DataFrame:
     """
-    Detect emotions in biblical texts based on lexical analysis.
+    Generate a summary of sentiment patterns across biblical books.
     
     Args:
         bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
-        book: Optional book name to filter by
-        chapter: Optional chapter number to filter by
-        verse: Optional verse number to filter by
-        custom_lexicon: Optional custom emotion lexicon to use instead of default
-        unit: Unit of analysis ('verse', 'sentence', 'chapter', or 'book')
+        books: Optional list of books to include
         
     Returns:
-        DataFrame with emotion scores for each unit
+        DataFrame with sentiment summary by book
         
     Example:
         >>> bible = loaders.load_text("kjv.txt")
-        >>> # Analyze emotions in Psalms
-        >>> emotions = emotion_detection(bible, book="Psalms")
-        >>> # Get most common emotions
-        >>> emotion_counts = emotions[EMOTION_LEXICON.keys()].sum()
-        >>> emotion_counts.sort_values(ascending=False)
+        >>> # Get sentiment summary for all Gospels
+        >>> summary = get_sentiment_summary_by_book(
+        ...     bible,
+        ...     books=["Matthew", "Mark", "Luke", "John"]
+        ... )
     """
-    # Use custom lexicon if provided, otherwise use default
-    emotion_lex = custom_lexicon if custom_lexicon else EMOTION_LEXICON
-    emotion_categories = list(emotion_lex.keys())
+    results = []
     
-    # Process based on unit type
-    if unit == 'verse':
-        results = []
-        
-        # Determine which books to include
-        if book:
-            if book not in bible_dict:
-                return pd.DataFrame()
-            books_to_check = {book: bible_dict[book]}
-        else:
-            books_to_check = bible_dict
-        
-        # Process each verse
-        for book_name, chapters in books_to_check.items():
-            # Filter by chapter
-            if chapter:
-                if chapter not in chapters:
-                    continue
-                chapters_to_check = {chapter: chapters[chapter]}
-            else:
-                chapters_to_check = chapters
-            
-            for chapter_num, verses in chapters_to_check.items():
-                # Filter by verse
-                if verse:
-                    if verse not in verses:
-                        continue
-                    verses_to_check = {verse: verses[verse]}
-                else:
-                    verses_to_check = verses
-                
-                for verse_num, verse_text in verses_to_check.items():
-                    # Tokenize text
-                    tokens = [token.lower() for token in word_tokenize(verse_text)]
-                    token_set = set(tokens)
-                    
-                    # Count emotions
-                    emotion_counts = {}
-                    dominant_emotion = None
-                    max_count = 0
-                    
-                    for emotion, word_set in emotion_lex.items():
-                        # Count matching words
-                        matches = token_set.intersection(word_set)
-                        count = len(matches)
-                        emotion_counts[emotion] = count
-                        
-                        # Track dominant emotion
-                        if count > max_count:
-                            max_count = count
-                            dominant_emotion = emotion
-                    
-                    # If no emotions detected, set dominant to 'neutral'
-                    if max_count == 0:
-                        dominant_emotion = 'neutral'
-                    
-                    # Create result
-                    result = {
-                        'book': book_name,
-                        'chapter': chapter_num,
-                        'verse': verse_num,
-                        'text': verse_text,
-                        'dominant_emotion': dominant_emotion,
-                        'emotion_count': max_count,
-                        'reference': f"{book_name} {chapter_num}:{verse_num}"
-                    }
-                    
-                    # Add individual emotion counts
-                    for emotion, count in emotion_counts.items():
-                        result[emotion] = count
-                    
-                    results.append(result)
-    
-    elif unit == 'sentence':
-        # Extract sentences
-        sentences = _extract_sentences(bible_dict, book, chapter, verse)
-        
-        results = []
-        for sentence_info in sentences:
-            # Tokenize text
-            tokens = [token.lower() for token in word_tokenize(sentence_info['text'])]
-            token_set = set(tokens)
-            
-            # Count emotions
-            emotion_counts = {}
-            dominant_emotion = None
-            max_count = 0
-            
-            for emotion, word_set in emotion_lex.items():
-                # Count matching words
-                matches = token_set.intersection(word_set)
-                count = len(matches)
-                emotion_counts[emotion] = count
-                
-                # Track dominant emotion
-                if count > max_count:
-                    max_count = count
-                    dominant_emotion = emotion
-            
-            # If no emotions detected, set dominant to 'neutral'
-            if max_count == 0:
-                dominant_emotion = 'neutral'
-            
-            # Create result
-            result = sentence_info.copy()
-            result['dominant_emotion'] = dominant_emotion
-            result['emotion_count'] = max_count
-            
-            # Add individual emotion counts
-            for emotion, count in emotion_counts.items():
-                result[emotion] = count
-            
-            results.append(result)
-    
-    elif unit in ('chapter', 'book'):
-        results = []
-        
-        # Determine which books to include
-        if book:
-            if book not in bible_dict:
-                return pd.DataFrame()
-            books_to_check = {book: bible_dict[book]}
-        else:
-            books_to_check = bible_dict
-        
-        for book_name, chapters in books_to_check.items():
-            if unit == 'chapter':
-                # Filter by chapter
-                if chapter:
-                    if chapter not in chapters:
-                        continue
-                    chapters_to_check = {chapter: chapters[chapter]}
-                else:
-                    chapters_to_check = chapters
-                
-                # Process each chapter
-                for chapter_num, verses in chapters_to_check.items():
-                    # Combine all verses in the chapter
-                    chapter_text = ' '.join(verse_text for verse_text in verses.values())
-                    
-                    # Tokenize text
-                    tokens = [token.lower() for token in word_tokenize(chapter_text)]
-                    token_set = set(tokens)
-                    
-                    # Count emotions
-                    emotion_counts = {}
-                    dominant_emotion = None
-                    max_count = 0
-                    
-                    for emotion, word_set in emotion_lex.items():
-                        # Count matching words
-                        matches = token_set.intersection(word_set)
-                        count = len(matches)
-                        emotion_counts[emotion] = count
-                        
-                        # Track dominant emotion
-                        if count > max_count:
-                            max_count = count
-                            dominant_emotion = emotion
-                    
-                    # If no emotions detected, set dominant to 'neutral'
-                    if max_count == 0:
-                        dominant_emotion = 'neutral'
-                    
-                    # Create result
-                    result = {
-                        'book': book_name,
-                        'chapter': chapter_num,
-                        'text': chapter_text[:100] + '...' if len(chapter_text) > 100 else chapter_text,
-                        'dominant_emotion': dominant_emotion,
-                        'emotion_count': max_count,
-                        'reference': f"{book_name} {chapter_num}"
-                    }
-                    
-                    # Add individual emotion counts
-                    for emotion, count in emotion_counts.items():
-                        result[emotion] = count
-                    
-                    results.append(result)
-            
-            else:  # unit == 'book'
-                # Combine all chapters and verses
-                book_text = ' '.join(
-                    verse_text 
-                    for chapter_verses in chapters.values() 
-                    for verse_text in chapter_verses.values()
-                )
-                
-                # Tokenize text
-                tokens = [token.lower() for token in word_tokenize(book_text)]
-                token_set = set(tokens)
-                
-                # Count emotions
-                emotion_counts = {}
-                dominant_emotion = None
-                max_count = 0
-                
-                for emotion, word_set in emotion_lex.items():
-                    # Count matching words
-                    matches = token_set.intersection(word_set)
-                    count = len(matches)
-                    emotion_counts[emotion] = count
-                    
-                    # Normalize by text length for fair comparison between books
-                    normalized_count = count / len(tokens) if tokens else 0
-                    emotion_counts[f"{emotion}_normalized"] = normalized_count
-                    
-                    # Track dominant emotion
-                    if count > max_count:
-                        max_count = count
-                        dominant_emotion = emotion
-                
-                # If no emotions detected, set dominant to 'neutral'
-                if max_count == 0:
-                    dominant_emotion = 'neutral'
-                
-                # Create result
-                result = {
-                    'book': book_name,
-                    'text': book_text[:100] + '...' if len(book_text) > 100 else book_text,
-                    'dominant_emotion': dominant_emotion,
-                    'emotion_count': max_count,
-                    'reference': book_name
-                }
-                
-                # Add individual emotion counts
-                for emotion, count in emotion_counts.items():
-                    result[emotion] = count
-                
-                results.append(result)
-    
+    # Determine which books to include
+    if books:
+        book_subset = {book: bible_dict[book] for book in books if book in bible_dict}
     else:
-        raise ValueError(f"Unknown unit '{unit}'. Choose from 'verse', 'sentence', 'chapter', or 'book'.")
+        book_subset = bible_dict
     
-    # Convert results to DataFrame
+    # Process each book
+    for book_name, chapters in book_subset.items():
+        # Combine all text in the book
+        book_text = ""
+        
+        for chapter_verses in chapters.values():
+            for verse_text in chapter_verses.values():
+                if verse_text:
+                    book_text += verse_text + " "
+        
+        # Skip empty books
+        if not book_text:
+            continue
+        
+        # Get sentiment analysis
+        sentiment = analyze_passage_sentiment(book_text, detailed=True)
+        
+        # Count verses by sentiment
+        verse_sentiments = []
+        total_verses = 0
+        
+        for chapter_num, verses in chapters.items():
+            for verse_num, verse_text in verses.items():
+                if verse_text:
+                    total_verses += 1
+                    verse_sentiment = analyze_passage_sentiment(verse_text)
+                    verse_sentiments.append(verse_sentiment["overall_sentiment"])
+        
+        # Count by sentiment category
+        sentiment_counts = Counter(verse_sentiments)
+        
+        positive_percent = sentiment_counts.get("positive", 0) / total_verses * 100 if total_verses else 0
+        negative_percent = sentiment_counts.get("negative", 0) / total_verses * 100 if total_verses else 0
+        neutral_percent = sentiment_counts.get("neutral", 0) / total_verses * 100 if total_verses else 0
+        
+        # Add dominant emotions
+        emotions = sentiment.get("emotions", {})
+        top_emotions = sorted(emotions.items(), key=lambda x: x[1], reverse=True)
+        top_emotions = [f"{emotion} ({count})" for emotion, count in top_emotions[:3] if count > 0]
+        
+        # Add to results
+        results.append({
+            "book": book_name,
+            "total_verses": total_verses,
+            "compound_score": sentiment["compound_score"],
+            "positive_score": sentiment["positive_score"],
+            "negative_score": sentiment["negative_score"],
+            "neutral_score": sentiment["neutral_score"],
+            "overall_sentiment": sentiment["overall_sentiment"],
+            "positive_verses_percent": positive_percent,
+            "negative_verses_percent": negative_percent,
+            "neutral_verses_percent": neutral_percent,
+            "dominant_emotions": ", ".join(top_emotions) if top_emotions else "None detected"
+        })
+    
+    # Convert to DataFrame
     if results:
         df = pd.DataFrame(results)
+        
+        # Sort alphabetically by book name
+        df = df.sort_values("book")
     else:
         # Create empty DataFrame with expected columns
-        cols = ['book', 'reference', 'dominant_emotion', 'emotion_count'] + emotion_categories
-        df = pd.DataFrame(columns=cols)
-    
-    return df
-
-
-def subjectivity_analysis(bible_dict: Dict[str, Any], book: Optional[str] = None,
-                         chapter: Optional[int] = None, verse: Optional[int] = None,
-                         unit: str = 'verse') -> pd.DataFrame:
-    """
-    Analyze subjectivity (objective vs. subjective) in biblical texts.
-    
-    Args:
-        bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
-        book: Optional book name to filter by
-        chapter: Optional chapter number to filter by
-        verse: Optional verse number to filter by
-        unit: Unit of analysis ('verse', 'sentence', 'chapter', or 'book')
-        
-    Returns:
-        DataFrame with subjectivity scores for each unit
-        
-    Example:
-        >>> bible = loaders.load_text("kjv.txt")
-        >>> subj = subjectivity_analysis(bible, book="John")
-    """
-    if not HAS_TEXTBLOB:
-        raise ImportError("TextBlob is required for subjectivity analysis. "
-                         "Please install it with 'pip install textblob'.")
-    
-    # Process based on unit type
-    if unit == 'verse':
-        results = []
-        
-        # Determine which books to include
-        if book:
-            if book not in bible_dict:
-                return pd.DataFrame()
-            books_to_check = {book: bible_dict[book]}
-        else:
-            books_to_check = bible_dict
-        
-        # Process each verse
-        for book_name, chapters in books_to_check.items():
-            # Filter by chapter
-            if chapter:
-                if chapter not in chapters:
-                    continue
-                chapters_to_check = {chapter: chapters[chapter]}
-            else:
-                chapters_to_check = chapters
-            
-            for chapter_num, verses in chapters_to_check.items():
-                # Filter by verse
-                if verse:
-                    if verse not in verses:
-                        continue
-                    verses_to_check = {verse: verses[verse]}
-                else:
-                    verses_to_check = verses
-                
-                for verse_num, verse_text in verses_to_check.items():
-                    # Calculate subjectivity
-                    subjectivity = TextBlob(verse_text).sentiment.subjectivity
-                    
-                    # Categorize subjectivity
-                    if subjectivity < 0.33:
-                        category = 'objective'
-                    elif subjectivity > 0.66:
-                        category = 'subjective'
-                    else:
-                        category = 'neutral'
-                    
-                    results.append({
-                        'book': book_name,
-                        'chapter': chapter_num,
-                        'verse': verse_num,
-                        'text': verse_text,
-                        'subjectivity_score': subjectivity,
-                        'subjectivity_category': category,
-                        'reference': f"{book_name} {chapter_num}:{verse_num}"
-                    })
-    
-    elif unit == 'sentence':
-        # Extract sentences
-        sentences = _extract_sentences(bible_dict, book, chapter, verse)
-        
-        results = []
-        for sentence_info in sentences:
-            # Calculate subjectivity
-            subjectivity = TextBlob(sentence_info['text']).sentiment.subjectivity
-            
-            # Categorize subjectivity
-            if subjectivity < 0.33:
-                category = 'objective'
-            elif subjectivity > 0.66:
-                category = 'subjective'
-            else:
-                category = 'neutral'
-            
-            result = sentence_info.copy()
-            result['subjectivity_score'] = subjectivity
-            result['subjectivity_category'] = category
-            
-            results.append(result)
-    
-    elif unit in ('chapter', 'book'):
-        results = []
-        
-        # Determine which books to include
-        if book:
-            if book not in bible_dict:
-                return pd.DataFrame()
-            books_to_check = {book: bible_dict[book]}
-        else:
-            books_to_check = bible_dict
-        
-        for book_name, chapters in books_to_check.items():
-            if unit == 'chapter':
-                # Filter by chapter
-                if chapter:
-                    if chapter not in chapters:
-                        continue
-                    chapters_to_check = {chapter: chapters[chapter]}
-                else:
-                    chapters_to_check = chapters
-                
-                # Process each chapter
-                for chapter_num, verses in chapters_to_check.items():
-                    # Combine all verses in the chapter
-                    chapter_text = ' '.join(verse_text for verse_text in verses.values())
-                    
-                    # Calculate subjectivity
-                    subjectivity = TextBlob(chapter_text).sentiment.subjectivity
-                    
-                    # Categorize subjectivity
-                    if subjectivity < 0.33:
-                        category = 'objective'
-                    elif subjectivity > 0.66:
-                        category = 'subjective'
-                    else:
-                        category = 'neutral'
-                    
-                    results.append({
-                        'book': book_name,
-                        'chapter': chapter_num,
-                        'text': chapter_text[:100] + '...' if len(chapter_text) > 100 else chapter_text,
-                        'subjectivity_score': subjectivity,
-                        'subjectivity_category': category,
-                        'reference': f"{book_name} {chapter_num}"
-                    })
-            
-            else:  # unit == 'book'
-                # Combine all chapters and verses
-                book_text = ' '.join(
-                    verse_text 
-                    for chapter_verses in chapters.values() 
-                    for verse_text in chapter_verses.values()
-                )
-                
-                # Calculate subjectivity
-                subjectivity = TextBlob(book_text).sentiment.subjectivity
-                
-                # Categorize subjectivity
-                if subjectivity < 0.33:
-                    category = 'objective'
-                elif subjectivity > 0.66:
-                    category = 'subjective'
-                else:
-                    category = 'neutral'
-                
-                results.append({
-                    'book': book_name,
-                    'text': book_text[:100] + '...' if len(book_text) > 100 else book_text,
-                    'subjectivity_score': subjectivity,
-                    'subjectivity_category': category,
-                    'reference': book_name
-                })
-    
-    else:
-        raise ValueError(f"Unknown unit '{unit}'. Choose from 'verse', 'sentence', 'chapter', or 'book'.")
-    
-    # Convert results to DataFrame
-    if results:
-        df = pd.DataFrame(results)
-    else:
-        # Create empty DataFrame with expected columns
-        df = pd.DataFrame(columns=['book', 'chapter', 'verse', 'text', 
-                                 'subjectivity_score', 'subjectivity_category', 'reference'])
+        columns = ["book", "total_verses", "compound_score", "positive_score", 
+                  "negative_score", "neutral_score", "overall_sentiment",
+                  "positive_verses_percent", "negative_verses_percent", 
+                  "neutral_verses_percent", "dominant_emotions"]
+        df = pd.DataFrame(columns=columns)
     
     return df
