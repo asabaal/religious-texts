@@ -189,7 +189,7 @@ def analyze_quoted_context(bible_dict: Dict[str, Any],
     
     # Simply identify the most frequent terms that are missing
     for term in sorted(verse_unique, key=lambda t: verse_terms[t], reverse=True)[:5]:
-        if verse_terms[t] > 1:  # Only include terms that appear multiple times
+        if verse_terms[term] > 1:  # Only include terms that appear multiple times
             missing_key_terms.append(term)
     
     # Calculate contextual consistency score (0-10)
@@ -240,6 +240,26 @@ def analyze_quoted_context(bible_dict: Dict[str, Any],
     }
     
     return result
+
+# Add the missing function to match the import in __init__.py
+def analyze_quote_context(bible_dict: Dict[str, Any],
+                        reference: str,
+                        interpretation: str,
+                        context_size: int = 5) -> Dict[str, Any]:
+    """
+    Analyze whether a quoted passage is used consistently with its broader context.
+    This is an alias for analyze_quoted_context to match the import in __init__.py.
+    
+    Args:
+        bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
+        reference: Verse reference as quoted in debate
+        interpretation: The interpretation or claim made about the verse
+        context_size: Number of verses before and after to analyze
+        
+    Returns:
+        Dictionary with context analysis results
+    """
+    return analyze_quoted_context(bible_dict, reference, interpretation, context_size)
 
 def compare_passage_interpretations(bible_dict: Dict[str, Any],
                                   reference: str,
@@ -721,3 +741,166 @@ def check_genre_appropriate_interpretation(bible_dict: Dict[str, Any],
     result["inappropriate_aspects"] = inappropriate_approaches
     
     return result
+
+# Add missing functions to match imports in __init__.py
+def broader_literary_context(bible_dict: Dict[str, Any], reference: str) -> Dict[str, Any]:
+    """
+    Analyze the broader literary context of a biblical verse.
+    This function examines the passage in the context of its chapter, book, and 
+    broader narrative/thematic units.
+    
+    Args:
+        bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
+        reference: Verse reference to analyze
+        
+    Returns:
+        Dictionary with literary context analysis
+    """
+    # Basic implementation to match the import in __init__.py
+    # Extract the full chapter context
+    context = extract_passage_context(bible_dict, reference, context_size=10)
+    
+    if not context["verse_text"]:
+        return {
+            "reference": reference,
+            "error": "Reference not found",
+            "valid_reference": False
+        }
+    
+    # Parse reference
+    parts = reference.split()
+    if len(parts) < 2:
+        return {"error": "Invalid reference format"}
+    
+    book = " ".join(parts[:-1])
+    chapter_verse = parts[-1].split(":")
+    
+    if len(chapter_verse) != 2:
+        return {"error": "Invalid reference format"}
+    
+    try:
+        chapter = int(chapter_verse[0])
+        verse = int(chapter_verse[1])
+    except ValueError:
+        return {"error": "Invalid reference format"}
+        
+    # Return a simplified broader context analysis
+    return {
+        "reference": reference,
+        "verse_text": context["verse_text"],
+        "valid_reference": True,
+        "book": book,
+        "chapter": chapter,
+        "verse": verse,
+        "chapter_context": context["chapter_context"],
+        "preceding_context": context["preceding_context"],
+        "following_context": context["following_context"]
+    }
+
+def historical_context(bible_dict: Dict[str, Any], reference: str) -> Dict[str, Any]:
+    """
+    Provide historical context for a biblical verse.
+    
+    Args:
+        bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
+        reference: Verse reference to analyze
+        
+    Returns:
+        Dictionary with historical context information
+    """
+    # Basic implementation to match the import in __init__.py
+    context = extract_passage_context(bible_dict, reference, context_size=3)
+    
+    if not context["verse_text"]:
+        return {
+            "reference": reference,
+            "error": "Reference not found",
+            "valid_reference": False
+        }
+        
+    # Return a simple placeholder result
+    return {
+        "reference": reference,
+        "verse_text": context["verse_text"],
+        "valid_reference": True,
+        "historical_information": "Historical context analysis would appear here."
+    }
+
+def verse_contextual_meaning(bible_dict: Dict[str, Any], reference: str) -> Dict[str, Any]:
+    """
+    Analyze the contextual meaning of a verse within its immediate literary context.
+    
+    Args:
+        bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
+        reference: Verse reference to analyze
+        
+    Returns:
+        Dictionary with contextual meaning analysis
+    """
+    # Basic implementation to match the import in __init__.py
+    context = extract_passage_context(bible_dict, reference, context_size=3)
+    
+    if not context["verse_text"]:
+        return {
+            "reference": reference,
+            "error": "Reference not found",
+            "valid_reference": False
+        }
+        
+    # Return a simple placeholder result
+    return {
+        "reference": reference,
+        "verse_text": context["verse_text"],
+        "valid_reference": True,
+        "contextual_meaning": "Contextual meaning analysis would appear here."
+    }
+
+def cross_reference_analysis(bible_dict: Dict[str, Any], 
+                           primary_reference: str, 
+                           cross_references: List[str]) -> Dict[str, Any]:
+    """
+    Analyze the relationships between a primary verse and related cross-references.
+    
+    Args:
+        bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
+        primary_reference: Main verse reference to analyze
+        cross_references: List of related verse references
+        
+    Returns:
+        Dictionary with cross-reference analysis
+    """
+    # Basic implementation to match the import in __init__.py
+    context = extract_passage_context(bible_dict, primary_reference, context_size=3)
+    
+    if not context["verse_text"]:
+        return {
+            "primary_reference": primary_reference,
+            "error": "Primary reference not found",
+            "valid_reference": False
+        }
+    
+    # Process each cross-reference
+    ref_analyses = []
+    
+    for ref in cross_references:
+        ref_context = extract_passage_context(bible_dict, ref, context_size=1)
+        
+        if ref_context["verse_text"]:
+            ref_analyses.append({
+                "reference": ref,
+                "verse_text": ref_context["verse_text"],
+                "valid": True
+            })
+        else:
+            ref_analyses.append({
+                "reference": ref,
+                "valid": False
+            })
+    
+    # Return a simple cross-reference analysis
+    return {
+        "primary_reference": primary_reference,
+        "primary_verse_text": context["verse_text"],
+        "valid_reference": True,
+        "cross_references": ref_analyses
+    }
