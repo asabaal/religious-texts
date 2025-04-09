@@ -14,6 +14,150 @@ import pandas as pd
 import numpy as np
 from nltk.tokenize import word_tokenize, sent_tokenize
 
+def compare_interpretations(interpretation1: Dict[str, Any], 
+                           interpretation2: Dict[str, Any],
+                           passages: List[str],
+                           bible_dict: Dict[str, Any]) -> pd.DataFrame:
+    """
+    Compare two different interpretations of the same biblical passages.
+    
+    Args:
+        interpretation1: Dictionary with details of the first interpretation
+        interpretation2: Dictionary with details of the second interpretation
+        passages: List of biblical passages to compare interpretations on
+        bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
+        
+    Returns:
+        DataFrame with comparison results
+        
+    Example:
+        >>> # Compare Trinitarian vs Unitarian interpretations
+        >>> trinitarian = {
+        ...     "name": "Trinitarian Reading",
+        ...     "description": "Jesus is fully divine, equal with God",
+        ...     "key_terms": ["deity", "worship", "divine", "God"],
+        ...     "supporting_passages": ["John 1:1", "John 20:28", "Hebrews 1:8"]
+        ... }
+        >>> unitarian = {
+        ...     "name": "Unitarian Reading",
+        ...     "description": "Jesus is God's agent but not equal to God",
+        ...     "key_terms": ["agent", "subordinate", "representative", "sent"],
+        ...     "supporting_passages": ["John 14:28", "John 17:3", "1 Cor 8:6"]
+        ... }
+        >>> results = compare_interpretations(
+        ...     trinitarian, unitarian, ["John 1:1-18", "John 10:30"], bible_dict
+        ... )
+    """
+    # Process passages to get the text
+    passage_texts = {}
+    
+    for ref in passages:
+        # Handle range references (e.g., "John 1:1-18")
+        if '-' in ref.split(':')[-1]:
+            parts = ref.split()
+            book = ' '.join(parts[:-1])
+            chapter_verse = parts[-1].split(':')
+            
+            if len(chapter_verse) == 2:
+                chapter = int(chapter_verse[0])
+                verse_range = chapter_verse[1].split('-')
+                
+                if len(verse_range) == 2:
+                    start_verse = int(verse_range[0])
+                    end_verse = int(verse_range[1])
+                    
+                    if book in bible_dict and chapter in bible_dict[book]:
+                        # Collect all verses in the range
+                        verses_text = []
+                        for verse in range(start_verse, end_verse + 1):
+                            if verse in bible_dict[book][chapter]:
+                                verses_text.append(bible_dict[book][chapter][verse])
+                        
+                        if verses_text:
+                            passage_texts[ref] = ' '.join(verses_text)
+        else:
+            # Handle single verse references
+            parts = ref.split()
+            if len(parts) >= 2:
+                book = ' '.join(parts[:-1])
+                chapter_verse = parts[-1].split(':')
+                
+                if len(chapter_verse) == 2:
+                    chapter = int(chapter_verse[0])
+                    verse = int(chapter_verse[1])
+                    
+                    if book in bible_dict and chapter in bible_dict[book] and verse in bible_dict[book][chapter]:
+                        passage_texts[ref] = bible_dict[book][chapter][verse]
+    
+    # Initialize results list
+    results = []
+    
+    # Compare interpretations for each passage
+    for passage, text in passage_texts.items():
+        # Calculate scores for each interpretation
+        interp1_score = 0
+        interp1_terms = []
+        interp2_score = 0
+        interp2_terms = []
+        
+        # Check for key terms from each interpretation
+        for term in interpretation1.get("key_terms", []):
+            pattern = r'\b' + re.escape(term.lower()) + r'\b'
+            matches = re.findall(pattern, text.lower())
+            interp1_score += len(matches)
+            interp1_terms.extend([term] * len(matches))
+        
+        for term in interpretation2.get("key_terms", []):
+            pattern = r'\b' + re.escape(term.lower()) + r'\b'
+            matches = re.findall(pattern, text.lower())
+            interp2_score += len(matches)
+            interp2_terms.extend([term] * len(matches))
+        
+        # Check for supporting passages
+        interp1_support = 0
+        for support_ref in interpretation1.get("supporting_passages", []):
+            if passage == support_ref or (passage in passage_texts and support_ref in passage_texts):
+                interp1_support += 1
+        
+        interp2_support = 0
+        for support_ref in interpretation2.get("supporting_passages", []):
+            if passage == support_ref or (passage in passage_texts and support_ref in passage_texts):
+                interp2_support += 1
+        
+        # Determine which interpretation has stronger evidence for this passage
+        stronger_interp = None
+        if interp1_score > interp2_score:
+            stronger_interp = interpretation1["name"]
+        elif interp2_score > interp1_score:
+            stronger_interp = interpretation2["name"]
+        else:
+            stronger_interp = "Equal"
+        
+        # Add to results
+        results.append({
+            "passage": passage,
+            "text": text,
+            f"{interpretation1['name']}_score": interp1_score,
+            f"{interpretation1['name']}_terms": ", ".join(interp1_terms),
+            f"{interpretation1['name']}_support": interp1_support,
+            f"{interpretation2['name']}_score": interp2_score,
+            f"{interpretation2['name']}_terms": ", ".join(interp2_terms),
+            f"{interpretation2['name']}_support": interp2_support,
+            "stronger_interpretation": stronger_interp
+        })
+    
+    if results:
+        return pd.DataFrame(results)
+    else:
+        # Return empty DataFrame with expected columns if no results
+        columns = [
+            "passage", "text", 
+            f"{interpretation1['name']}_score", f"{interpretation1['name']}_terms", f"{interpretation1['name']}_support",
+            f"{interpretation2['name']}_score", f"{interpretation2['name']}_terms", f"{interpretation2['name']}_support",
+            "stronger_interpretation"
+        ]
+        return pd.DataFrame(columns=columns)
+
 def create_framework_profile(framework_name: str, 
                            key_terms: Dict[str, List[str]],
                            hermeneutic_principles: List[str],
