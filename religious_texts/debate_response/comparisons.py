@@ -14,6 +14,689 @@ import pandas as pd
 import numpy as np
 from nltk.tokenize import word_tokenize, sent_tokenize
 
+def compare_interpretations(interpretation1: Dict[str, Any], 
+                           interpretation2: Dict[str, Any],
+                           passages: List[str],
+                           bible_dict: Dict[str, Any]) -> pd.DataFrame:
+    """
+    Compare two different interpretations of the same biblical passages.
+    
+    Args:
+        interpretation1: Dictionary with details of the first interpretation
+        interpretation2: Dictionary with details of the second interpretation
+        passages: List of biblical passages to compare interpretations on
+        bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
+        
+    Returns:
+        DataFrame with comparison results
+        
+    Example:
+        >>> # Compare Trinitarian vs Unitarian interpretations
+        >>> trinitarian = {
+        ...     "name": "Trinitarian Reading",
+        ...     "description": "Jesus is fully divine, equal with God",
+        ...     "key_terms": ["deity", "worship", "divine", "God"],
+        ...     "supporting_passages": ["John 1:1", "John 20:28", "Hebrews 1:8"]
+        ... }
+        >>> unitarian = {
+        ...     "name": "Unitarian Reading",
+        ...     "description": "Jesus is God's agent but not equal to God",
+        ...     "key_terms": ["agent", "subordinate", "representative", "sent"],
+        ...     "supporting_passages": ["John 14:28", "John 17:3", "1 Cor 8:6"]
+        ... }
+        >>> results = compare_interpretations(
+        ...     trinitarian, unitarian, ["John 1:1-18", "John 10:30"], bible_dict
+        ... )
+    """
+    # Process passages to get the text
+    passage_texts = {}
+    
+    for ref in passages:
+        # Handle range references (e.g., "John 1:1-18")
+        if '-' in ref.split(':')[-1]:
+            parts = ref.split()
+            book = ' '.join(parts[:-1])
+            chapter_verse = parts[-1].split(':')
+            
+            if len(chapter_verse) == 2:
+                chapter = int(chapter_verse[0])
+                verse_range = chapter_verse[1].split('-')
+                
+                if len(verse_range) == 2:
+                    start_verse = int(verse_range[0])
+                    end_verse = int(verse_range[1])
+                    
+                    if book in bible_dict and chapter in bible_dict[book]:
+                        # Collect all verses in the range
+                        verses_text = []
+                        for verse in range(start_verse, end_verse + 1):
+                            if verse in bible_dict[book][chapter]:
+                                verses_text.append(bible_dict[book][chapter][verse])
+                        
+                        if verses_text:
+                            passage_texts[ref] = ' '.join(verses_text)
+        else:
+            # Handle single verse references
+            parts = ref.split()
+            if len(parts) >= 2:
+                book = ' '.join(parts[:-1])
+                chapter_verse = parts[-1].split(':')
+                
+                if len(chapter_verse) == 2:
+                    chapter = int(chapter_verse[0])
+                    verse = int(chapter_verse[1])
+                    
+                    if book in bible_dict and chapter in bible_dict[book] and verse in bible_dict[book][chapter]:
+                        passage_texts[ref] = bible_dict[book][chapter][verse]
+    
+    # Initialize results list
+    results = []
+    
+    # Compare interpretations for each passage
+    for passage, text in passage_texts.items():
+        # Calculate scores for each interpretation
+        interp1_score = 0
+        interp1_terms = []
+        interp2_score = 0
+        interp2_terms = []
+        
+        # Check for key terms from each interpretation
+        for term in interpretation1.get("key_terms", []):
+            pattern = r'\b' + re.escape(term.lower()) + r'\b'
+            matches = re.findall(pattern, text.lower())
+            interp1_score += len(matches)
+            interp1_terms.extend([term] * len(matches))
+        
+        for term in interpretation2.get("key_terms", []):
+            pattern = r'\b' + re.escape(term.lower()) + r'\b'
+            matches = re.findall(pattern, text.lower())
+            interp2_score += len(matches)
+            interp2_terms.extend([term] * len(matches))
+        
+        # Check for supporting passages
+        interp1_support = 0
+        for support_ref in interpretation1.get("supporting_passages", []):
+            if passage == support_ref or (passage in passage_texts and support_ref in passage_texts):
+                interp1_support += 1
+        
+        interp2_support = 0
+        for support_ref in interpretation2.get("supporting_passages", []):
+            if passage == support_ref or (passage in passage_texts and support_ref in passage_texts):
+                interp2_support += 1
+        
+        # Determine which interpretation has stronger evidence for this passage
+        stronger_interp = None
+        if interp1_score > interp2_score:
+            stronger_interp = interpretation1["name"]
+        elif interp2_score > interp1_score:
+            stronger_interp = interpretation2["name"]
+        else:
+            stronger_interp = "Equal"
+        
+        # Add to results
+        results.append({
+            "passage": passage,
+            "text": text,
+            f"{interpretation1['name']}_score": interp1_score,
+            f"{interpretation1['name']}_terms": ", ".join(interp1_terms),
+            f"{interpretation1['name']}_support": interp1_support,
+            f"{interpretation2['name']}_score": interp2_score,
+            f"{interpretation2['name']}_terms": ", ".join(interp2_terms),
+            f"{interpretation2['name']}_support": interp2_support,
+            "stronger_interpretation": stronger_interp
+        })
+    
+    if results:
+        return pd.DataFrame(results)
+    else:
+        # Return empty DataFrame with expected columns if no results
+        columns = [
+            "passage", "text", 
+            f"{interpretation1['name']}_score", f"{interpretation1['name']}_terms", f"{interpretation1['name']}_support",
+            f"{interpretation2['name']}_score", f"{interpretation2['name']}_terms", f"{interpretation2['name']}_support",
+            "stronger_interpretation"
+        ]
+        return pd.DataFrame(columns=columns)
+
+def interpretation_consistency(bible_dict: Dict[str, Any],
+                              interpretation: Dict[str, Any],
+                              passages: List[str]) -> Dict[str, Any]:
+    """
+    Evaluate the internal consistency of an interpretation across multiple passages.
+    
+    Args:
+        bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
+        interpretation: Dictionary with interpretation details
+        passages: List of biblical passages to check for consistency
+        
+    Returns:
+        Dictionary with consistency evaluation results
+        
+    Example:
+        >>> bible = loaders.load_text("kjv.txt")
+        >>> # Check consistency of Trinitarian interpretation
+        >>> trinitarian = {
+        ...     "name": "Trinitarian Reading",
+        ...     "description": "Jesus is fully divine, equal with God",
+        ...     "key_terms": ["deity", "worship", "divine", "God"],
+        ...     "supporting_passages": ["John 1:1", "John 20:28", "Hebrews 1:8"]
+        ... }
+        >>> results = interpretation_consistency(
+        ...     bible, trinitarian, ["John 1:1", "John 17:3", "1 Timothy 2:5"]
+        ... )
+    """
+    # Extract interpretation details
+    interp_name = interpretation.get("name", "Unnamed Interpretation")
+    interp_desc = interpretation.get("description", "")
+    key_terms = interpretation.get("key_terms", [])
+    supporting_passages = interpretation.get("supporting_passages", [])
+    
+    # Process passages to get the text
+    passage_data = []
+    
+    for ref in passages:
+        # Handle range references (e.g., "John 1:1-18")
+        text = None
+        
+        if '-' in ref.split(':')[-1]:
+            parts = ref.split()
+            book = ' '.join(parts[:-1])
+            chapter_verse = parts[-1].split(':')
+            
+            if len(chapter_verse) == 2:
+                chapter = int(chapter_verse[0])
+                verse_range = chapter_verse[1].split('-')
+                
+                if len(verse_range) == 2:
+                    start_verse = int(verse_range[0])
+                    end_verse = int(verse_range[1])
+                    
+                    if book in bible_dict and chapter in bible_dict[book]:
+                        # Collect all verses in the range
+                        verses_text = []
+                        for verse in range(start_verse, end_verse + 1):
+                            if verse in bible_dict[book][chapter]:
+                                verses_text.append(bible_dict[book][chapter][verse])
+                        
+                        if verses_text:
+                            text = ' '.join(verses_text)
+        else:
+            # Handle single verse references
+            parts = ref.split()
+            if len(parts) >= 2:
+                book = ' '.join(parts[:-1])
+                chapter_verse = parts[-1].split(':')
+                
+                if len(chapter_verse) == 2:
+                    chapter = int(chapter_verse[0])
+                    verse = int(chapter_verse[1])
+                    
+                    if book in bible_dict and chapter in bible_dict[book] and verse in bible_dict[book][chapter]:
+                        text = bible_dict[book][chapter][verse]
+        
+        if text:
+            # Calculate term occurrences for this passage
+            term_matches = []
+            
+            for term in key_terms:
+                pattern = r'\b' + re.escape(term.lower()) + r'\b'
+                matches = re.findall(pattern, text.lower())
+                if matches:
+                    term_matches.append(term)
+            
+            # Is this a supporting passage?
+            is_supporting = ref in supporting_passages
+            
+            # Store passage data
+            passage_data.append({
+                "reference": ref,
+                "text": text,
+                "matching_terms": term_matches,
+                "term_count": len(term_matches),
+                "is_supporting": is_supporting
+            })
+    
+    # Calculate consistency metrics
+    supporting_score = 0
+    supporting_count = 0
+    non_supporting_score = 0
+    non_supporting_count = 0
+    
+    for data in passage_data:
+        if data["is_supporting"]:
+            supporting_score += data["term_count"]
+            supporting_count += 1
+        else:
+            non_supporting_score += data["term_count"]
+            non_supporting_count += 1
+    
+    avg_supporting_score = supporting_score / max(1, supporting_count)
+    avg_non_supporting_score = non_supporting_score / max(1, non_supporting_count)
+    
+    # Calculate consistency ratio
+    # Higher ratio means more consistent (supporting passages have more key terms)
+    consistency_ratio = avg_supporting_score / max(0.1, avg_non_supporting_score)
+    
+    # Analyze term distribution across passages
+    term_distribution = {}
+    for term in key_terms:
+        term_count = sum(1 for data in passage_data if term in data["matching_terms"])
+        term_distribution[term] = term_count / len(passage_data)
+    
+    # Prepare results
+    results = {
+        "interpretation_name": interp_name,
+        "interpretation_description": interp_desc,
+        "passages_analyzed": len(passage_data),
+        "supporting_passages_count": supporting_count,
+        "non_supporting_passages_count": non_supporting_count,
+        "avg_terms_in_supporting": avg_supporting_score,
+        "avg_terms_in_non_supporting": avg_non_supporting_score,
+        "consistency_ratio": consistency_ratio,
+        "is_consistent": consistency_ratio > 1.5,  # Threshold for considering consistent
+        "term_distribution": term_distribution,
+        "passage_data": passage_data
+    }
+    
+    return results
+
+def alternative_readings(bible_dict: Dict[str, Any],
+                         passage: str,
+                         interpretations: List[Dict[str, Any]]) -> pd.DataFrame:
+    """
+    Analyze and compare multiple alternative readings of a biblical passage.
+    
+    Args:
+        bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
+        passage: Biblical passage reference to analyze
+        interpretations: List of dictionaries with interpretation details
+        
+    Returns:
+        DataFrame with alternative reading analysis
+        
+    Example:
+        >>> bible = loaders.load_text("kjv.txt")
+        >>> # Analyze John 1:1 alternative readings
+        >>> readings = [
+        ...     {
+        ...         "name": "Orthodox",
+        ...         "translation": "the Word was God",
+        ...         "key_terms": ["deity", "identity"],
+        ...         "theological_framework": "Trinitarian"
+        ...     },
+        ...     {
+        ...         "name": "NWT",
+        ...         "translation": "the Word was a god",
+        ...         "key_terms": ["qualitative", "subordinate"],
+        ...         "theological_framework": "Non-trinitarian"
+        ...     }
+        ... ]
+        >>> results = alternative_readings(bible, "John 1:1", readings)
+    """
+    # Extract passage text
+    passage_text = None
+    
+    # Handle range references (e.g., "John 1:1-18")
+    if '-' in passage.split(':')[-1]:
+        parts = passage.split()
+        book = ' '.join(parts[:-1])
+        chapter_verse = parts[-1].split(':')
+        
+        if len(chapter_verse) == 2:
+            chapter = int(chapter_verse[0])
+            verse_range = chapter_verse[1].split('-')
+            
+            if len(verse_range) == 2:
+                start_verse = int(verse_range[0])
+                end_verse = int(verse_range[1])
+                
+                if book in bible_dict and chapter in bible_dict[book]:
+                    # Collect all verses in the range
+                    verses_text = []
+                    for verse in range(start_verse, end_verse + 1):
+                        if verse in bible_dict[book][chapter]:
+                            verses_text.append(bible_dict[book][chapter][verse])
+                    
+                    if verses_text:
+                        passage_text = ' '.join(verses_text)
+    else:
+        # Handle single verse references
+        parts = passage.split()
+        if len(parts) >= 2:
+            book = ' '.join(parts[:-1])
+            chapter_verse = parts[-1].split(':')
+            
+            if len(chapter_verse) == 2:
+                chapter = int(chapter_verse[0])
+                verse = int(chapter_verse[1])
+                
+                if book in bible_dict and chapter in bible_dict[book] and verse in bible_dict[book][chapter]:
+                    passage_text = bible_dict[book][chapter][verse]
+    
+    if not passage_text:
+        # Empty DataFrame with expected columns
+        columns = ["reading_name", "translation", "theological_framework", 
+                   "textual_basis", "interpretive_issues", "comparative_score"]
+        return pd.DataFrame(columns=columns)
+    
+    # Get surrounding context for evaluating readings
+    context_text = ""
+    parts = passage.split()
+    if len(parts) >= 2:
+        book = ' '.join(parts[:-1])
+        chapter_verse = parts[-1].split(':')
+        
+        if len(chapter_verse) == 2:
+            chapter = int(chapter_verse[0])
+            verse = int(chapter_verse[1])
+            
+            # Get 2 verses before and after
+            for v in range(max(1, verse - 2), verse + 3):
+                if v != verse and book in bible_dict and chapter in bible_dict[book] and v in bible_dict[book][chapter]:
+                    context_text += bible_dict[book][chapter][v] + " "
+    
+    # Analyze each reading
+    reading_data = []
+    
+    for i, reading in enumerate(interpretations):
+        reading_name = reading.get("name", f"Reading {i+1}")
+        translation = reading.get("translation", "")
+        framework = reading.get("theological_framework", "")
+        key_terms = reading.get("key_terms", [])
+        
+        # Calculate textual fit
+        textual_fit = 0
+        matching_terms = []
+        
+        for term in key_terms:
+            pattern = r'\b' + re.escape(term.lower()) + r'\b'
+            # Check both passage and context
+            passage_matches = re.findall(pattern, passage_text.lower())
+            context_matches = re.findall(pattern, context_text.lower())
+            
+            # Count matches (passage matches worth more)
+            term_score = len(passage_matches) + 0.5 * len(context_matches)
+            textual_fit += term_score
+            
+            if passage_matches or context_matches:
+                matching_terms.append(term)
+        
+        # Identify potential interpretive issues
+        issues = []
+        
+        # Check if translation matches passage
+        if translation and translation.lower() not in passage_text.lower():
+            issues.append("Translation differs from standard text")
+        
+        # Check for theological coherence with context
+        if context_text and key_terms:
+            context_matches = sum(1 for term in key_terms if term.lower() in context_text.lower())
+            if context_matches == 0:
+                issues.append("Key terms absent from surrounding context")
+        
+        reading_data.append({
+            "reading_name": reading_name,
+            "translation": translation,
+            "theological_framework": framework,
+            "textual_basis": ", ".join(matching_terms),
+            "interpretive_issues": ", ".join(issues),
+            "comparative_score": textual_fit
+        })
+    
+    # Sort by comparative score
+    reading_df = pd.DataFrame(reading_data)
+    reading_df = reading_df.sort_values("comparative_score", ascending=False)
+    
+    return reading_df
+
+def compare_translations(bible_dict: Dict[str, Any],
+                        reference: str,
+                        translations: Dict[str, Dict[str, Any]]) -> pd.DataFrame:
+    """
+    Compare different translations of a biblical passage and analyze differences.
+    
+    Args:
+        bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
+        reference: Biblical passage reference to compare
+        translations: Dictionary mapping translation names to text
+        
+    Returns:
+        DataFrame with translation comparison results
+        
+    Example:
+        >>> bible = loaders.load_text("kjv.txt")
+        >>> # Compare translations of Romans 3:28
+        >>> translations = {
+        ...     "KJV": {"text": "Therefore we conclude that a man is justified by faith without the deeds of the law."},
+        ...     "Luther": {"text": "So halten wir es nun, daß der Mensch gerecht werde ohne des Gesetzes Werke, allein durch den Glauben."}
+        ... }
+        >>> results = compare_translations(bible, "Romans 3:28", translations)
+    """
+    # Initialize results list
+    results = []
+    
+    # Extract reference information
+    parts = reference.split()
+    if len(parts) < 2:
+        return pd.DataFrame()
+    
+    book = ' '.join(parts[:-1])
+    chapter_verse = parts[-1].split(':')
+    
+    if len(chapter_verse) != 2:
+        return pd.DataFrame()
+    
+    # Extract key terms from all translations
+    all_terms = []
+    
+    for trans_name, trans_data in translations.items():
+        text = trans_data.get("text", "")
+        if text:
+            # Simple tokenization (could be improved for non-English)
+            tokens = text.lower().split()
+            # Remove common words and punctuation
+            tokens = [token.strip('.,;:?!()[]"\'') for token in tokens if len(token) > 3]
+            all_terms.extend(tokens)
+    
+    # Count term frequency
+    term_counts = Counter(all_terms)
+    
+    # Get the most common terms (potential key theological terms)
+    key_terms = [term for term, count in term_counts.most_common(10) if count > 1]
+    
+    # Analyze each translation
+    for trans_name, trans_data in translations.items():
+        text = trans_data.get("text", "")
+        if not text:
+            continue
+        
+        # Check for key terms
+        term_presence = {}
+        for term in key_terms:
+            term_presence[term] = term.lower() in text.lower()
+        
+        # Analyze translation characteristics
+        char_count = len(text)
+        word_count = len(text.split())
+        avg_word_length = sum(len(word) for word in text.split()) / max(1, word_count)
+        
+        # Check for unique terms in this translation
+        tokens = set(text.lower().split())
+        unique_terms = [token for token in tokens 
+                       if sum(1 for t_name, t_data in translations.items() 
+                             if t_name != trans_name and token in t_data.get("text", "").lower()) == 0]
+        
+        results.append({
+            "translation": trans_name,
+            "text": text,
+            "char_count": char_count,
+            "word_count": word_count,
+            "avg_word_length": avg_word_length,
+            "key_terms_present": sum(term_presence.values()),
+            "unique_terms": ", ".join(unique_terms[:5])  # Show up to 5 unique terms
+        })
+    
+    if results:
+        df = pd.DataFrame(results)
+        
+        # Add comparative columns
+        avg_char_count = df["char_count"].mean()
+        avg_word_count = df["word_count"].mean()
+        
+        df["char_ratio"] = df["char_count"] / avg_char_count
+        df["word_ratio"] = df["word_count"] / avg_word_count
+        
+        # Sort by word count (shorter to longer)
+        df = df.sort_values("word_count")
+        
+        return df
+    else:
+        return pd.DataFrame()
+
+def translation_bias_analysis(bible_dict: Dict[str, Any],
+                             reference: str,
+                             translations: Dict[str, Dict[str, Any]],
+                             theological_terms: Dict[str, List[str]]) -> Dict[str, Any]:
+    """
+    Analyze potential theological bias in different translations of a passage.
+    
+    Args:
+        bible_dict: Bible dictionary with structure {book: {chapter: {verse: text}}}
+        reference: Biblical passage reference to analyze
+        translations: Dictionary mapping translation names to text
+        theological_terms: Dictionary mapping theological positions to related terms
+        
+    Returns:
+        Dictionary with bias analysis results
+        
+    Example:
+        >>> bible = loaders.load_text("kjv.txt")
+        >>> # Analyze Romans 9:5 translations for Christological bias
+        >>> translations = {
+        ...     "KJV": {"text": "...Christ came, who is over all, God blessed for ever."},
+        ...     "NEB": {"text": "...Christ came. May God, supreme above all, be blessed for ever!"}
+        ... }
+        >>> theological_terms = {
+        ...     "High Christology": ["God", "deity", "divine", "worship"],
+        ...     "Low Christology": ["agent", "subordinate", "human", "separate"]
+        ... }
+        >>> results = translation_bias_analysis(
+        ...     bible, "Romans 9:5", translations, theological_terms
+        ... )
+    """
+    # Initialize results
+    results = {
+        "reference": reference,
+        "translation_analysis": [],
+        "theological_metrics": {},
+        "bias_assessment": {}
+    }
+    
+    # Extract reference information
+    parts = reference.split()
+    if len(parts) < 2:
+        return results
+    
+    book = ' '.join(parts[:-1])
+    chapter_verse = parts[-1].split(':')
+    
+    if len(chapter_verse) != 2:
+        return results
+    
+    # Analyze each translation
+    translation_scores = {}
+    
+    for trans_name, trans_data in translations.items():
+        text = trans_data.get("text", "")
+        if not text:
+            continue
+        
+        # Calculate theological term occurrences
+        theology_scores = {}
+        matching_terms = {}
+        
+        for position, terms in theological_terms.items():
+            position_score = 0
+            position_matches = []
+            
+            for term in terms:
+                pattern = r'\b' + re.escape(term.lower()) + r'\b'
+                matches = re.findall(pattern, text.lower())
+                
+                if matches:
+                    position_score += len(matches)
+                    position_matches.extend([term] * len(matches))
+            
+            theology_scores[position] = position_score
+            matching_terms[position] = list(set(position_matches))
+        
+        # Determine primary theological lean
+        max_score = 0
+        primary_position = None
+        
+        for position, score in theology_scores.items():
+            if score > max_score:
+                max_score = score
+                primary_position = position
+        
+        # Calculate bias strength
+        total_score = sum(theology_scores.values())
+        bias_strength = max_score / total_score if total_score > 0 else 0
+        
+        # Only consider biased if there's a clear lean
+        is_biased = bias_strength > 0.7 and max_score > 1
+        
+        # Store analysis for this translation
+        translation_scores[trans_name] = {
+            "text": text,
+            "theology_scores": theology_scores,
+            "matching_terms": matching_terms,
+            "primary_position": primary_position,
+            "bias_strength": bias_strength,
+            "is_biased": is_biased
+        }
+        
+        results["translation_analysis"].append({
+            "translation": trans_name,
+            "text": text,
+            "primary_position": primary_position,
+            "bias_strength": bias_strength,
+            "is_biased": is_biased,
+            "matching_terms": matching_terms
+        })
+    
+    # Calculate overall metrics
+    position_counts = {}
+    for theological_position in theological_terms.keys():
+        count = sum(1 for trans_name, data in translation_scores.items() 
+                   if data["primary_position"] == theological_position and data["is_biased"])
+        position_counts[theological_position] = count
+    
+    results["theological_metrics"]["position_counts"] = position_counts
+    
+    # Assess bias across translations
+    total_translations = len(translations)
+    biased_translations = sum(1 for data in translation_scores.values() if data["is_biased"])
+    bias_percentage = (biased_translations / total_translations) * 100 if total_translations > 0 else 0
+    
+    # Determine if there's a dominant position
+    max_position_count = max(position_counts.values()) if position_counts else 0
+    dominant_position = None
+    
+    if max_position_count > 0:
+        dominant_positions = [pos for pos, count in position_counts.items() if count == max_position_count]
+        dominant_position = dominant_positions[0] if len(dominant_positions) == 1 else None
+    
+    results["bias_assessment"] = {
+        "total_translations": total_translations,
+        "biased_translations": biased_translations,
+        "bias_percentage": bias_percentage,
+        "dominant_position": dominant_position,
+        "has_clear_bias": dominant_position is not None and bias_percentage > 50
+    }
+    
+    return results
+
 def create_framework_profile(framework_name: str, 
                            key_terms: Dict[str, List[str]],
                            hermeneutic_principles: List[str],
