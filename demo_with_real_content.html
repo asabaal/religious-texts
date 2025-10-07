@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblical Content Agent - Real Generated Content Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #00d4ff, #7b2ff7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #a0a0a0;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #7b2ff7;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 20px 0;
+        }
+
+        .content-card {
+            background: rgba(123, 47, 247, 0.1);
+            border: 1px solid rgba(123, 47, 247, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(123, 47, 247, 0.3);
+            border-color: #7b2ff7;
+        }
+
+        .concept-title {
+            font-weight: bold;
+            color: #00d4ff;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .passage-ref {
+            color: #ff6b6b;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .script-content {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .script-hook {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .script-context {
+            color: #a8e6cf;
+        }
+
+        .script-application {
+            color: #ffd93d;
+        }
+
+        .script-cta {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .scores {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .score-item {
+            background: rgba(0, 212, 255, 0.2);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .score-label {
+            color: #a0a0a0;
+        }
+
+        .score-value {
+            color: #00d4ff;
+            font-weight: bold;
+        }
+
+        .file-list {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .file-item {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .terminal {
+            background: #0a0a0a;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #00ff88;
+            margin: 10px 0;
+        }
+
+        .terminal-line {
+            margin: 5px 0;
+        }
+
+        .terminal-prompt {
+            color: #00d4ff;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .stat-label {
+            color: #a0a0a0;
+            margin-top: 5px;
+        }
+
+        .button {
+            background: linear-gradient(45deg, #00d4ff, #7b2ff7);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(123, 47, 247, 0.4);
+        }
+
+        .highlight-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .highlight-box h4 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Biblical Content Agent</h1>
+            <p class="subtitle">Real Generated Content - Powered by Llama 3.1 8B</p>
+        </header>
+
+        <section class="section">
+            <h2>📊 Generation Results</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">11</div>
+                    <div class="stat-label">Content Items Generated</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Genesis</div>
+                    <div class="stat-label">To</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Romans</div>
+                    <div class="stat-label">Bible Coverage</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">AI Generated</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Real Generated Content</h2>
+            <p>Below is actual content generated by the Biblical Content Agent using Llama 3.1 8B. Each content item includes a concept, biblical passage, structured script, and quality evaluation.</p>
+            
+            <div class="content-grid">
+                <div class="content-card">
+                    <div class="concept-title">🌍 Creation and God's Power</div>
+                    <div class="passage-ref">Genesis 1:1</div>
+                    <div class="script-content">
+                        <div class="script-hook">Hook: "In the beginning, something amazing happened..."</div>
+                        <div class="script-context">Context: "The Bible says in Genesis 1:1, 'In the beginning God created the heavens and the earth.' This powerful verse reminds us that God's creative power knows no limits."</div>
+                        <div class="script-application">Application: "With this truth, I can trust that God is capable of making my dreams a reality."</div>
+                        <div class="script-cta">CTA: "Can you trust God to do the impossible today?"</div>
+                    </div>
+                    <div class="scores">
+                        <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                        <div class="score-item"><span class="score-label">Clarity:</span> <span class="score-value">7</span></div>
+                        <div class="score-item"><span class="score-label">Authenticity:</span> <span class="score-value">7</span></div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="concept-title">💝 God's Unconditional Love</div>
+                    <div class="passage-ref">John 3:16</div>
+                    <div class="script-content">
+                        <div class="script-hook">Hook: "God's love knows no bounds."</div>
+                        <div class="script-context">Context: "The Bible says God so loved the world, He gave His one and only Son to save us from destruction."</div>
+                        <div class="script-application">Application: "This means I don't have to earn my way to heaven - just believe in Jesus!"</div>
+                        <div class="script-cta">CTA: "So choose faith today and experience eternal life."</div>
+                    </div>
+                    <div class="scores">
+                        <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                        <div class="score-item"><span class="score-label">Clarity:</span> <span class="score-value">7</span></div>
+                        <div class="score-item"><span class="score-label">Authenticity:</span> <span class="score-value">7</span></div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="concept-title">😇 Beatitudes - Blessed are the Poor</div>
+                    <div class="passage-ref">Matthew 5:3</div>
+                    <div class="script-content">
+                        <div class="script-hook">Hook: "Poverty of pride precedes true wealth"</div>
+                        <div class="script-context">Context: "In Matthew 5:3, Jesus teaches us that those who recognize their spiritual poverty are blessed, for theirs is the kingdom of heaven."</div>
+                        <div class="script-application">Application: "For me, this means letting go of self-importance and embracing humility."</div>
+                        <div class="script-cta">CTA: "Let's surrender our pride today."</div>
+                    </div>
+                    <div class="scores">
+                        <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                        <div class="score-item"><span class="score-label">Clarity:</span> <span class="score-value">7</span></div>
+                        <div class="score-item"><span class="score-label">Authenticity:</span> <span class="score-value">7</span></div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="concept-title">🕊️ Mercy and Compassion</div>
+                    <div class="passage-ref">Matthew 5:7</div>
+                    <div class="script-content">
+                        <div class="script-hook">Hook: "Mercy flows from a heart touched by grace"</div>
+                        <div class="script-context">Context: "In Matthew 5:7, Jesus declares that those who show mercy will receive mercy, reflecting God's compassionate nature."</div>
+                        <div class="script-application">Application: "When I extend forgiveness to others, I experience God's mercy in my own life."</div>
+                        <div class="script-cta">CTA: "Who can you show mercy to today?"</div>
+                    </div>
+                    <div class="scores">
+                        <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                        <div class="score-item"><span class="score-label">Clarity:</span> <span class="score-value">7</span></div>
+                        <div class="score-item"><span class="score-label">Authenticity:</span> <span class="score-value">7</span></div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="concept-title">☀️ God's Light in Darkness</div>
+                    <div class="passage-ref">Genesis 1:3</div>
+                    <div class="script-content">
+                        <div class="script-hook">Hook: "Light breaks through every darkness"</div>
+                        <div class="script-context">Context: "Genesis 1:3 shows God speaking light into existence, demonstrating His power over darkness and chaos."</div>
+                        <div class="script-application">Application: "When I face dark times, God's light can break through and bring hope and clarity."</div>
+                        <div class="script-cta">CTA: "Let God's light guide you today."</div>
+                    </div>
+                    <div class="scores">
+                        <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                        <div class="score-item"><span class="score-label">Clarity:</span> <span class="score-value">7</span></div>
+                        <div class="score-item"><span class="score-label">Authenticity:</span> <span class="score-value">7</span></div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="concept-title">🛤️ Jesus as the Way</div>
+                    <div class="passage-ref">John 14:6</div>
+                    <div class="script-content">
+                        <div class="script-hook">Hook: "One path leads to eternal life"</div>
+                        <div class="script-context">Context: "In John 14:6, Jesus makes the exclusive claim that He is the way, truth, and life - the only path to God the Father."</div>
+                        <div class="script-application">Application: "This means I don't have to search for other paths - Jesus is the complete answer to my spiritual journey."</div>
+                        <div class="script-cta">CTA: "Follow Jesus with all your heart today."</div>
+                    </div>
+                    <div class="scores">
+                        <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                        <div class="score-item"><span class="score-label">Clarity:</span> <span class="score-value">7</span></div>
+                        <div class="score-item"><span class="score-label">Authenticity:</span> <span class="score-value">7</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📁 Generated Files on Your System</h2>
+            <div class="highlight-box">
+                <h4>🎉 All Files Successfully Created!</h4>
+                <p>The content agent generated 11 JSON files, each containing complete content with scripts, evaluations, and metadata.</p>
+            </div>
+            
+            <div class="file-list">
+                <div class="file-item">generated_content_1_Creation_and_Gods_Power.json</div>
+                <div class="file-item">generated_content_2_Gods_Light_in_Darkness.json</div>
+                <div class="file-item">generated_content_3_Humanitys_Creation.json</div>
+                <div class="file-item">generated_content_4_Temptation_and_Choice.json</div>
+                <div class="file-item">generated_content_5_Gods_Commandments.json</div>
+                <div class="file-item">generated_content_6_Beatitudes_-_Blessed_are_the_Poor.json</div>
+                <div class="file-item">generated_content_7_Mercy_and_Compassion.json</div>
+                <div class="file-item">generated_content_8_Peacemaking.json</div>
+                <div class="file-item">generated_content_9_Gods_Unconditional_Love.json</div>
+                <div class="file-item">generated_content_10_Jesus_as_the_Way.json</div>
+                <div class="file-item">generated_content_11_God_Works_for_Good.json</div>
+                <div class="file-item">generated_content_summary.json</div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💻 Actual Generation Output</h2>
+            <div class="terminal">
+                <div class="terminal-line"><span class="terminal-prompt">$</span> python generate_more_content.py</div>
+                <div class="terminal-line">🎬 Generating More Real Biblical Content</div>
+                <div class="terminal-line">==================================================</div>
+                <div class="terminal-line">Indexed 22 biblical passages for search.</div>
+                <div class="terminal-line"></div>
+                <div class="terminal-line">📝 Processing 1: Creation and God's Power</div>
+                <div class="terminal-line">📜 Passage: Genesis 1:1</div>
+                <div class="terminal-line">📖 Text: In the beginning God created the heavens and the earth.</div>
+                <div class="terminal-line">✅ Generated content for 'Creation and God's Power'</div>
+                <div class="terminal-line">💾 Saved to: generated_content_1_Creation_and_Gods_Power.json</div>
+                <div class="terminal-line"></div>
+                <div class="terminal-line">📝 Processing 2: God's Light in Darkness</div>
+                <div class="terminal-line">📜 Passage: Genesis 1:3</div>
+                <div class="terminal-line">📖 Text: And God said, 'Let there be light,' and there was light.</div>
+                <div class="terminal-line">✅ Generated content for 'God's Light in Darkness'</div>
+                <div class="terminal-line">💾 Saved to: generated_content_2_Gods_Light_in_Darkness.json</div>
+                <div class="terminal-line">...</div>
+                <div class="terminal-line"></div>
+                <div class="terminal-line">🎉 Generated 11 content items!</div>
+                <div class="terminal-line">📁 All files saved with prefix 'generated_content_'</div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 File Structure Example</h2>
+            <p>Each generated file contains the following structure:</p>
+            <div class="file-list">
+                <div class="file-item">
+                    <strong>concept:</strong> "Creation and God's Power"<br>
+                    <strong>passage:</strong> "Genesis 1:1"<br>
+                    <strong>text:</strong> "In the beginning God created the heavens and the earth."<br>
+                    <strong>script:</strong> [Complete structured script with hook, context, application, CTA]<br>
+                    <strong>evaluation:</strong> {"scores": {"Engagement": 7, "Clarity": 7, "Authenticity": 7}, "why": "Good content"}<br>
+                    <strong>translation:</strong> "ESV"
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🚀 Ready to Use</h2>
+            <div style="text-align: center;">
+                <p>All generated content is ready for use in:</p>
+                <div style="margin: 20px 0;">
+                    <div class="button">📱 Social Media Videos</div>
+                    <div class="button">⛪ Church Presentations</div>
+                    <div class="button">📚 Devotional Content</div>
+                    <div class="button">🎥 YouTube Shorts</div>
+                </div>
+                <p style="margin-top: 30px;">
+                    <strong>Run the agent yourself:</strong><br>
+                    <code style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px;">python generate_more_content.py</code>
+                </p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

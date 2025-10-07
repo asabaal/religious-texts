@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblical Content Agent - Multi-Angle Narrative System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #00d4ff, #7b2ff7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #a0a0a0;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #7b2ff7;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .enhancement-banner {
+            background: linear-gradient(45deg, rgba(0, 255, 136, 0.2), rgba(123, 47, 247, 0.2));
+            border: 2px solid rgba(0, 255, 136, 0.5);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .enhancement-banner h3 {
+            color: #00ff88;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .content-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .concept-header {
+            background: rgba(123, 47, 247, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .concept-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .passage-ref {
+            font-size: 1.1em;
+            color: #ff6b6b;
+            font-style: italic;
+        }
+
+        .angles-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .angle-card {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .angle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            border-color: #00d4ff;
+        }
+
+        .angle-title {
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .target-audience {
+            background: rgba(255, 107, 107, 0.2);
+            border-radius: 20px;
+            padding: 8px 15px;
+            display: inline-block;
+            margin: 10px 0;
+            font-size: 0.9em;
+            color: #ff6b6b;
+        }
+
+        .justification {
+            color: #a8e6cf;
+            margin: 15px 0;
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .script-content {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .script-hook {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .script-context {
+            color: #a8e6cf;
+        }
+
+        .script-application {
+            color: #ffd93d;
+        }
+
+        .script-cta {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .scores {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .score-item {
+            background: rgba(123, 47, 247, 0.2);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+
+        .score-label {
+            color: #a0a0a0;
+        }
+
+        .score-value {
+            color: #7b2ff7;
+            font-weight: bold;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .stat-label {
+            color: #a0a0a0;
+            margin-top: 5px;
+        }
+
+        .comparison {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison h4 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .file-list {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .file-item {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .terminal {
+            background: #0a0a0a;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #00ff88;
+            margin: 10px 0;
+        }
+
+        .terminal-line {
+            margin: 5px 0;
+        }
+
+        .terminal-prompt {
+            color: #00d4ff;
+        }
+
+        .button {
+            background: linear-gradient(45deg, #00d4ff, #7b2ff7);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(123, 47, 247, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Biblical Content Agent - Enhanced!</h1>
+            <p class="subtitle">Multi-Angle Narrative System with Top 3 Framing Options</p>
+        </header>
+
+        <section class="section">
+            <div class="enhancement-banner">
+                <h3>🚀 MAJOR ENHANCEMENT!</h3>
+                <p>Now generating <strong>TOP 3 NARRATIVE ANGLES</strong> for each biblical passage with detailed justifications and target audience analysis!</p>
+            </div>
+
+            <h2>📊 System Enhancement Overview</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">3x</div>
+                    <div class="stat-label">More Content Options</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Passages Enhanced</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Total Angles Generated</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">AI Powered</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Multi-Angle Content Examples</h2>
+            <p>Each biblical passage now comes with <strong>3 distinct narrative angles</strong>, each with its own justification, target audience, and tailored script.</p>
+
+            <!-- Example 1: God's Unconditional Love -->
+            <div class="content-item">
+                <div class="concept-header">
+                    <div class="concept-title">💝 God's Unconditional Love</div>
+                    <div class="passage-ref">John 3:16</div>
+                </div>
+
+                <div class="angles-container">
+                    <div class="angle-card">
+                        <div class="angle-title">👩‍👧‍👦 A Mother's Unwavering Sacrifice</div>
+                        <div class="target-audience">🎯 Young parents, mothers</div>
+                        <div class="justification">
+                            "This angle resonates by highlighting God's selfless love through the familiar lens of parental sacrifice, making the concept more relatable and tangible."
+                        </div>
+                        <div class="script-content">
+                            <div class="script-hook">Hook: "Will you love your child more than life?"</div>
+                            <div class="script-context">Context: Just like mothers give their all for their children, God gave His only Son so we can have eternal life.</div>
+                            <div class="script-application">Application: As a mother, God's selfless love inspires us to sacrifice for our own children.</div>
+                            <div class="script-cta">CTA: Love others as God loves you, and be willing to give your all.</div>
+                        </div>
+                        <div class="scores">
+                            <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                            <div class="score-item"><span class="score-label">Angle Fit:</span> <span class="score-value">7</span></div>
+                        </div>
+                    </div>
+
+                    <div class="angle-card">
+                        <div class="angle-title">😔 The Ultimate Act of Rejection</div>
+                        <div class="target-audience">🎯 Young adults struggling with self-esteem</div>
+                        <div class="justification">
+                            "This angle explores rejection themes many people face today, showing how God's love isn't based on human worthiness but His unconditional acceptance."
+                        </div>
+                        <div class="script-content">
+                            <div class="script-hook">Hook: "You're not good enough, but God loves you."</div>
+                            <div class="script-context">Context: In John 3:16, God's love isn't based on our worthiness, but on His desire to save us even when we were rejected and broken.</div>
+                            <div class="script-application">Application: Your rejection by others doesn't define your value; God's acceptance does.</div>
+                            <div class="script-cta">CTA: Choose to believe in God's unconditional love.</div>
+                        </div>
+                        <div class="scores">
+                            <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                            <div class="score-item"><span class="score-label">Angle Fit:</span> <span class="score-value">7</span></div>
+                        </div>
+                    </div>
+
+                    <div class="angle-card">
+                        <div class="angle-title">♾️ A Love Beyond Measure</div>
+                        <div class="target-audience">🎯 Devout Christians seeking deeper understanding</div>
+                        <div class="justification">
+                            "This angle emphasizes the magnitude of God's love, addressing human tendencies to limit love capacity and demonstrating that God's love knows no bounds."
+                        </div>
+                        <div class="script-content">
+                            <div class="script-hook">Hook: "Limitless love defies human comprehension"</div>
+                            <div class="script-context">Context: John 3:16 reveals God's boundless affection, giving His Son so we might have eternal life.</div>
+                            <div class="script-application">Application: We often think our love has limits, but God's love knows no bounds.</div>
+                            <div class="script-cta">CTA: Reflect on how God's limitless love transforms your heart.</div>
+                        </div>
+                        <div class="scores">
+                            <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                            <div class="score-item"><span class="score-label">Angle Fit:</span> <span class="score-value">7</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 2: Finding Purpose in Suffering -->
+            <div class="content-item">
+                <div class="concept-header">
+                    <div class="concept-title">🎯 Finding Purpose in Suffering</div>
+                    <div class="passage-ref">Romans 8:28</div>
+                </div>
+
+                <div class="angles-container">
+                    <div class="angle-card">
+                        <div class="angle-title">🏆 From Trials to Triumph: Finding Victory</div>
+                        <div class="target-audience">🎯 Young adults with anxiety/depression</div>
+                        <div class="justification">
+                            "Speaks directly to universal human experience of facing challenges, reassuring that God works for good even in difficult circumstances."
+                        </div>
+                        <div class="script-content">
+                            <div class="script-hook">Hook: "Lost in darkness, but not alone"</div>
+                            <div class="script-context">Context: Romans 8:28 reminds us that God works for our good even in trials.</div>
+                            <div class="script-application">Application: For those struggling with anxiety, He's shaping you into something more.</div>
+                            <div class="script-cta">CTA: Trust Him and look for hidden victories emerging from your struggles.</div>
+                        </div>
+                        <div class="scores">
+                            <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                            <div class="score-item"><span class="score-label">Angle Fit:</span> <span class="score-value">7</span></div>
+                        </div>
+                    </div>
+
+                    <div class="angle-card">
+                        <div class="angle-title">🗺️ God's Master Plan: Discovering Purpose</div>
+                        <div class="target-audience">🎯 People in midlife crises or feeling unfulfilled</div>
+                        <div class="justification">
+                            "Connects to the desire for meaning and purpose, emphasizing God's sovereign plan and encouraging trust in higher guidance."
+                        </div>
+                        <div class="script-content">
+                            <div class="script-hook">Hook: "Lost in the darkness of midlife?"</div>
+                            <div class="script-context">Context: Romans 8:28 reminds us that God has a master plan, working all things for our good.</div>
+                            <div class="script-application">Application: Find comfort in His guidance, not your circumstances.</div>
+                            <div class="script-cta">CTA: Trust that He's weaving your story into something beautiful.</div>
+                        </div>
+                        <div class="scores">
+                            <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                            <div class="score-item"><span class="score-label">Angle Fit:</span> <span class="score-value">7</span></div>
+                        </div>
+                    </div>
+
+                    <div class="angle-card">
+                        <div class="angle-title">💪 Becoming Resilient: The Power of Perspective</div>
+                        <div class="target-audience">🎯 Personal growth and self-improvement seekers</div>
+                        <div class="justification">
+                            "Highlights growth mindset and reframing challenges as opportunities, encouraging resilience and trust in God's goodness during hard times."
+                        </div>
+                        <div class="script-content">
+                            <div class="script-hook">Hook: "Transforming hardship into triumph"</div>
+                            <div class="script-context">Context: Romans 8:28 reveals that God works good from every challenge.</div>
+                            <div class="script-application">Application: Reframe your struggles as opportunities for growth.</div>
+                            <div class="script-cta">CTA: Choose to see suffering as a catalyst for transformation.</div>
+                        </div>
+                        <div class="scores">
+                            <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                            <div class="score-item"><span class="score-label">Angle Fit:</span> <span class="score-value">7</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 3: The Power of Humility -->
+            <div class="content-item">
+                <div class="concept-header">
+                    <div class="concept-title">😇 The Power of Humility</div>
+                    <div class="passage-ref">Matthew 5:5</div>
+                </div>
+
+                <div class="angles-container">
+                    <div class="angle-card">
+                        <div class="angle-title">👔 From Meek to Mighty Leaders</div>
+                        <div class="target-audience">🎯 Young professionals and entrepreneurs</div>
+                        <div class="justification">
+                            "Highlights overlooked aspect of humility in leadership, relevant for aspiring leaders seeking fresh approaches to success."
+                        </div>
+                        <div class="script-content">
+                            <div class="script-hook">Hook: "From Power-Hungry to Purpose-Driven Leaders"</div>
+                            <div class="script-context">Context: In Matthew 5:5, Jesus teaches that meekness is strength under control.</div>
+                            <div class="script-application">Application: Embracing humility can lead to lasting success and impact.</div>
+                            <div class="script-cta">CTA: Choose to be mighty from the inside out.</div>
+                        </div>
+                        <div class="scores">
+                            <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                            <div class="score-item"><span class="score-label">Angle Fit:</span> <span class="score-value">7</span></div>
+                        </div>
+                    </div>
+
+                    <div class="angle-card">
+                        <div class="angle-title">🌿 The Blessing of Gentle Strength</div>
+                        <div class="target-audience">🎯 Mental health advocates and self-care enthusiasts</div>
+                        <div class="justification">
+                            "Explores how true power comes from gentleness, resonating with those seeking balance between assertiveness and kindness."
+                        </div>
+                        <div class="script-content">
+                            <div class="script-hook">Hook: "Find strength in gentle surrender."</div>
+                            <div class="script-context">Context: Jesus teaches that meekness is a path to true power through trust in God.</div>
+                            <div class="script-application">Application: Embrace soft-spoken assertiveness and inner peace over external validation.</div>
+                            <div class="script-cta">CTA: Practice gentleness today, and watch your inner strength flourish.</div>
+                        </div>
+                        <div class="scores">
+                            <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                            <div class="score-item"><span class="score-label">Angle Fit:</span> <span class="score-value">7</span></div>
+                        </div>
+                    </div>
+
+                    <div class="angle-card">
+                        <div class="angle-title">🌍 Inheriting a World of Peace</div>
+                        <div class="target-audience">🎯 Social activists and community builders</div>
+                        <div class="justification">
+                            "Delves into long-term benefits of humility, offering hope for peaceful world where people thrive together."
+                        </div>
+                        <div class="script-content">
+                            <div class="script-hook">Hook: "Transforming conflict into common ground."</div>
+                            <div class="script-context">Context: Jesus promises that meekness will lead to inheriting a peaceful earth.</div>
+                            <div class="script-application">Application: Embracing humility can help bridge divides and create lasting change.</div>
+                            <div class="script-cta">CTA: Cultivate humility in your work for justice and peace.</div>
+                        </div>
+                        <div class="scores">
+                            <div class="score-item"><span class="score-label">Engagement:</span> <span class="score-value">7</span></div>
+                            <div class="score-item"><span class="score-label">Angle Fit:</span> <span class="score-value">7</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📈 Before vs After Comparison</h2>
+            <div class="comparison">
+                <h4>🔍 BEFORE (Single Angle):</h4>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li>One narrative angle per passage</li>
+                    <li>Limited audience targeting</li>
+                    <li>Single creative direction</li>
+                    <li>Basic script generation</li>
+                </ul>
+
+                <h4>🚀 AFTER (Multi-Angle System):</h4>
+                <ul style="margin-left: 20px;">
+                    <li><strong>TOP 3 narrative angles</strong> per passage</li>
+                    <li><strong>Specific target audience</strong> for each angle</li>
+                    <li><strong>Detailed justification</strong> for why each angle works</li>
+                    <li><strong>Angle-specific scripts</strong> tailored to each audience</li>
+                    <li><strong>Angle-fit evaluation</strong> scoring system</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📁 Generated Files</h2>
+            <div class="file-list">
+                <div class="file-item">multi_angle_content_1_Gods_Unconditional_Love.json</div>
+                <div class="file-item">multi_angle_content_2_Finding_Purpose_in_Suffering.json</div>
+                <div class="file-item">multi_angle_content_3_The_Power_of_Humility.json</div>
+                <div class="file-item">multi_angle_content_4_Creation_and_Divine_Power.json</div>
+                <div class="file-item">multi_angle_content_5_Light_Overcoming_Darkness.json</div>
+                <div class="file-item">multi_angle_content_summary.json</div>
+            </div>
+
+            <div class="terminal">
+                <div class="terminal-line"><span class="terminal-prompt">$</span> python generate_content_with_angles.py</div>
+                <div class="terminal-line">🎬 Biblical Content Generator with Multiple Narrative Angles</div>
+                <div class="terminal-line">============================================================</div>
+                <div class="terminal-line">🎯 Generating angles for: God's Unconditional Love</div>
+                <div class="terminal-line">✅ Generated 3 narrative angles</div>
+                <div class="terminal-line">   📝 Creating script for angle 1: A Mother's Unwavering Sacrifice</div>
+                <div class="terminal-line">   ✅ Completed angle 1</div>
+                <div class="terminal-line">   📝 Creating script for angle 2: The Ultimate Act of Rejection</div>
+                <div class="terminal-line">   ✅ Completed angle 2</div>
+                <div class="terminal-line">   📝 Creating script for angle 3: A Love Beyond Measure</div>
+                <div class="terminal-line">   ✅ Completed angle 3</div>
+                <div class="terminal-line">💾 Saved to: multi_angle_content_1_Gods_Unconditional_Love.json</div>
+                <div class="terminal-line">...</div>
+                <div class="terminal-line">🎉 Generated content with multiple angles for 5 passages!</div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Key Benefits of Multi-Angle System</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">🎯</div>
+                    <div class="stat-label">Precise Audience Targeting</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">🎭</div>
+                    <div class="stat-label">Creative Variety</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">📊</div>
+                    <div class="stat-label">Data-Driven Justification</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">⚡</div>
+                    <div class="stat-label">3x Content Output</div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="margin-bottom: 20px;"><strong>Run the enhanced system yourself:</strong></p>
+                <code style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; display: block; margin: 0 auto; max-width: 400px;">python generate_content_with_angles.py</code>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
