@@ -1,0 +1,186 @@
+# Canon databases for different Bible traditions
+
+# Protestant Canon (66 books)
+protestant_books:
+  old_testament:
+    - Genesis
+    - Exodus
+    - Leviticus
+    - Numbers
+    - Deuteronomy
+    - Joshua
+    - Judges
+    - Ruth
+    - 1 Samuel
+    - 2 Samuel
+    - 1 Kings
+    - 2 Kings
+    - 1 Chronicles
+    - 2 Chronicles
+    - Ezra
+    - Nehemiah
+    - Esther
+    - Job
+    - Psalms
+    - Proverbs
+    - Ecclesiastes
+    - Song of Solomon
+    - Isaiah
+    - Jeremiah
+    - Lamentations
+    - Ezekiel
+    - Daniel
+    - Hosea
+    - Joel
+    - Amos
+    - Obadiah
+    - Jonah
+    - Micah
+    - Nahum
+    - Habakkuk
+    - Zephaniah
+    - Haggai
+    - Zechariah
+    - Malachi
+  new_testament:
+    - Matthew
+    - Mark
+    - Luke
+    - John
+    - Acts
+    - Romans
+    - 1 Corinthians
+    - 2 Corinthians
+    - Galatians
+    - Ephesians
+    - Philippians
+    - Colossians
+    - 1 Thessalonians
+    - 2 Thessalonians
+    - 1 Timothy
+    - 2 Timothy
+    - Titus
+    - Philemon
+    - Hebrews
+    - James
+    - 1 Peter
+    - 2 Peter
+    - 1 John
+    - 2 John
+    - 3 John
+    - Jude
+    - Revelation
+
+# Catholic Canon (73 books) - includes deuterocanonical books
+catholic_books:
+  old_testament:
+    # All Protestant OT books plus:
+    - Tobit
+    - Judith
+    - Wisdom (of Solomon)
+    - Sirach (Ecclesiasticus)
+    - Baruch
+    - 1 Maccabees
+    - 2 Maccabees
+    # Additional parts to existing books:
+    - Esther (Greek additions)
+    - Daniel (Greek additions: Prayer of Azariah, Susanna, Bel and the Dragon)
+  new_testament:
+    # Same as Protestant NT
+    - Matthew
+    - Mark
+    - Luke
+    - John
+    - Acts
+    - Romans
+    - 1 Corinthians
+    - 2 Corinthians
+    - Galatians
+    - Ephesians
+    - Philippians
+    - Colossians
+    - 1 Thessalonians
+    - 2 Thessalonians
+    - 1 Timothy
+    - 2 Timothy
+    - Titus
+    - Philemon
+    - Hebrews
+    - James
+    - 1 Peter
+    - 2 Peter
+    - 1 John
+    - 2 John
+    - 3 John
+    - Jude
+    - Revelation
+
+# Orthodox Canon (78+ books) - includes additional deuterocanonical books
+orthodox_books:
+  old_testament:
+    # All Catholic OT books plus:
+    - 1 Esdras
+    - 2 Esdras (3 Esdras)
+    - 3 Maccabees
+    - 4 Maccabees
+    - Psalm 151
+    - Prayer of Manasseh
+    # Some traditions include:
+    - Odes
+    - Letter of Jeremiah
+  new_testament:
+    # Same as Catholic/Protestant NT
+    - Matthew
+    - Mark
+    - Luke
+    - John
+    - Acts
+    - Romans
+    - 1 Corinthians
+    - 2 Corinthians
+    - Galatians
+    - Ephesians
+    - Philippians
+    - Colossians
+    - 1 Thessalonians
+    - 2 Thessalonians
+    - 1 Timothy
+    - 2 Timothy
+    - Titus
+    - Philemon
+    - Hebrews
+    - James
+    - 1 Peter
+    - 2 Peter
+    - 1 John
+    - 2 John
+    - 3 John
+    - Jude
+    - Revelation
+
+# Book name variations for matching
+book_variations:
+  "Song of Solomon":
+    - "Song of Songs"
+    - "Canticle of Canticles"
+    - "Song"
+  "Sirach":
+    - "Ecclesiasticus"
+    - "Wisdom of Jesus Son of Sirach"
+  "Wisdom":
+    - "Wisdom of Solomon"
+    - "Book of Wisdom"
+  "1 Esdras":
+    - "Esdras A"
+    - "Greek Ezra"
+  "2 Esdras":
+    - "Esdras B"
+    - "Latin Ezra"
+    - "3 Esdras"
+  "Revelation":
+    - "Apocalypse"
+    - "Revelation of John"
+    - "Apocalypse of John"
+  "Philippians":
+    - "Philippians"
+    - "Philippans"  # Common typo

@@ -1,0 +1,22 @@
+ollama:
+  model: "qwen3:30b"
+  temperature: 0.1
+  max_tokens: 8000
+  context_window: 32000
+  timeout: 120  # seconds
+
+extraction:
+  confidence_threshold: 0.8
+  batch_size: 5
+  max_retries: 3
+  context_pages: 3  # previous 2 + current + next 1
+  
+prompting:
+  system_prompt: "You are a Bible text extraction expert with deep knowledge of Biblical canon, verse structure, and manuscript traditions. Extract verses with perfect accuracy."
+  max_context_length: 6000  # characters
+  
+processing:
+  discovery_batch_size: 20  # pages for book discovery
+  processing_batch_size: 5   # pages for verse extraction
+  checkpoint_interval: 50    # save progress every N pages
+  parallel_workers: 1        # number of concurrent Ollama instances

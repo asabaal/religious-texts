@@ -1,0 +1,19 @@
+{
+  "detected_books": [
+    "Acts",
+    "Deuteronomy",
+    "Exodus",
+    "Genesis",
+    "John",
+    "Leviticus",
+    "Luke",
+    "Mark",
+    "Matthew",
+    "Nahum",
+    "Numbers"
+  ],
+  "canon_type": "unknown",
+  "confidence": 0.0,
+  "pdf_format": "verse_start_lines",
+  "timestamp": "2025-10-21T14:48:15.114086"
+}

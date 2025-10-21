@@ -1,0 +1,51 @@
+quality:
+  min_confidence: 0.8
+  max_verse_gap: 5
+  require_sequence_continuity: true
+  max_verse_length: 500  # characters
+
+canon_types:
+  protestant:
+    old_testament: 39
+    new_testament: 27
+    total: 66
+    description: "Protestant canon - 66 books"
+    
+  catholic:
+    old_testament: 46
+    new_testament: 27
+    total: 73
+    description: "Catholic canon - includes deuterocanonical books"
+    
+  orthodox:
+    old_testament: 51
+    new_testament: 27
+    total: 78
+    description: "Orthodox canon - includes additional deuterocanonical books"
+
+validation_rules:
+  verse_sequences:
+    max_gap: 5
+    allow_duplicates: false
+    require_continuity: true
+    
+  book_names:
+    case_sensitive: false
+    allow_variations: true
+    standardize_output: true
+    
+  chapter_structure:
+    min_verses: 1
+    max_verses: 200
+    require_chapter_start: true
+
+error_handling:
+  retry_strategies:
+    - "rephrase_prompt"
+    - "reduce_context"
+    - "focus_on_problem_area"
+    
+  fallback_methods:
+    - "regex_extraction"
+    - "manual_review"
+    - "skip_with_flag"

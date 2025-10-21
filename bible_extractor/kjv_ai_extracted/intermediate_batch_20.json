@@ -1,0 +1,991 @@
+{
+  "batch_number": 20,
+  "total_verses": 123,
+  "timestamp": "2025-10-21T16:42:03.930120",
+  "verses": [
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 1,
+      "text": "In the beginning God created the heaven and the earth.",
+      "page": 5,
+      "confidence": 0.98
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 2,
+      "text": "And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.",
+      "page": 5,
+      "confidence": 0.97
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 3,
+      "text": "And God said, Let there be light: and there was light.",
+      "page": 5,
+      "confidence": 0.99
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 4,
+      "text": "And God saw the light, that it was good: and God divided the light from the darkness.",
+      "page": 5,
+      "confidence": 0.98
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 5,
+      "text": "And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day.",
+      "page": 5,
+      "confidence": 0.98
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 6,
+      "text": "And God said, Let there be a firmament in the midst of the waters, and let it divide the waters from the waters.",
+      "page": 5,
+      "confidence": 0.99
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 7,
+      "text": "And God made the firmament, and divided the waters which were under the firmament from the waters which were above the firmament: and it was so.",
+      "page": 5,
+      "confidence": 0.98
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 8,
+      "text": "And God called the firmament Heaven. And the evening and the morning were the second day.",
+      "page": 5,
+      "confidence": 0.98
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 9,
+      "text": "And God said, Let the waters under the heaven be gathered together unto one place, and let the dry land appear: and it was so.",
+      "page": 5,
+      "confidence": 0.99
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 10,
+      "text": "And God called the dry land Earth; and the gathering together of the waters called he Seas: and God saw that it was good.",
+      "page": 5,
+      "confidence": 0.98
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 11,
+      "text": "And God said, Let the earth bring forth grass, the herb yielding seed, and the fruit tree yielding fruit after his kind, whose seed is in itself, upon the earth: and it was so.",
+      "page": 5,
+      "confidence": 0.99
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 12,
+      "text": "And the earth brought forth grass, and herb yielding seed after his kind, and the tree yielding fruit, whose seed was in itself, after his kind: and God saw that it was good.",
+      "page": 5,
+      "confidence": 0.98
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 13,
+      "text": "And the evening and the morning were the third day.",
+      "page": 5,
+      "confidence": 0.97
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 14,
+      "text": "And God said, Let there be lights in the firmament of the heaven to divide the day from the night; and let them be for signs, and for seasons, and for days, and years:",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 15,
+      "text": "and let them be for lights in the firmament of the heaven to give light upon the earth: and it was so.",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 16,
+      "text": "And God made two great lights; the greater light to rule the day, and the lesser light to rule the night: he made the stars also.",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 17,
+      "text": "And God set them in the firmament of the heaven to give light upon the earth,",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 18,
+      "text": "and to rule over the day and over the night, and to divide the light from the darkness: and God saw that it was good.",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 19,
+      "text": "And the evening and the morning were the fourth day.",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 20,
+      "text": "And God said, Let the waters bring forth abundantly the moving creature that hath life, and fowl that may fly above the earth in the open firmament of heaven.",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 21,
+      "text": "And God created great whales, and every living creature that moveth, which the waters brought forth abundantly, after their kind, and every winged fowl after his kind: and God saw that it was good.",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 22,
+      "text": "And God blessed them, saying, Be fruitful, and multiply, and fill the waters in the seas, and let fowl multiply in the earth.",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 23,
+      "text": "And the evening and the morning were the fifth day.",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 24,
+      "text": "And God said, Let the earth bring forth the living creature after his kind, cattle, and creeping thing, and beast of the earth after his kind: and it was so.",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 25,
+      "text": "And God made the beast of the earth after his kind, and cattle after their kind, and every thing that creepeth upon the earth after his kind: and God saw that it was good.",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 26,
+      "text": "And God said, Let us make man in our image, after our likeness: and let them have dominion over the fish of the sea, and over the fowl of the air, and over the cattle, and over all the earth, and over every creeping thing that creepeth upon the earth.",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 27,
+      "text": "So God created man in his own image, in the image of God created he him; male and female created he them.",
+      "page": 6,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 28,
+      "text": "And God blessed them, and God said unto them, Be fruitful, and multiply, and replenish the earth, and subdue it: and have dominion over the fish of the sea, and over the fowl of the air, and over every living thing that moveth upon the earth.",
+      "page": 7,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 29,
+      "text": "And God said, Behold, I have given you every herb bearing seed, which is upon the face of all the earth, and every tree, in the which is the fruit of a tree yielding seed; to you it shall be for meat.",
+      "page": 7,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 30,
+      "text": "And to every beast of the earth, and to every fowl of the air, and to every thing that creepeth upon the earth, wherein there is life, I have given every green herb for meat: and it was so.",
+      "page": 7,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 31,
+      "text": "And God saw every thing that he had made, and, behold, it was very good. And the evening and the morning were the sixth day.",
+      "page": 7,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 1,
+      "text": "Thus the heavens and the earth were finished, and all the host of them.",
+      "page": 7,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 2,
+      "text": "And on the seventh day God ended his work which he had made; and he rested on the seventh day from all his work which he had made.",
+      "page": 7,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 3,
+      "text": "And God blessed the seventh day, and sanctified it: because that in it he had rested from all his work which God created and made.",
+      "page": 7,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 7,
+      "text": "And the Lord God formed man of the dust of the ground, and breathed into his nostrils the breath of life; and man became a living soul.",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 8,
+      "text": "And the Lord God planted a garden eastward in Eden; and there he put the man whom he had formed.",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 9,
+      "text": "And out of the ground made the Lord God to grow every tree that is pleasant to the sight, and good for food; the tree of life also in the midst of the garden, and the tree of knowledge of good and evil.",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 10,
+      "text": "And a river went out of Eden to water the garden; and from thence it was parted, and became into four heads.",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 11,
+      "text": "The name of the first is Pison: that is it which compasseth the whole land of Havilah, where there is gold;",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 12,
+      "text": "and the gold of that land is good: there is bdellium and the onyx stone.",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 13,
+      "text": "And the name of the second river is Gihon: the same is it that compasseth the whole land of Ethiopia.",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 14,
+      "text": "And the name of the third river is Hiddekel: that is it which goeth toward the east of Assyria. And the fourth river is Euphrates.",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 15,
+      "text": "And the Lord God took the man, and put him into the garden of Eden to dress it and to keep it.",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 16,
+      "text": "And the Lord God commanded the man, saying, Of every tree of the garden thou mayest freely eat:",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 17,
+      "text": "but of the tree of the knowledge of good and evil, thou shalt not eat of it: for in the day that thou eatest thereof thou shalt surely die.",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 18,
+      "text": "And the Lord God said, It is not good that the man should be alone; I will make him a help meet for him.",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 19,
+      "text": "And out of the ground the Lord God formed every beast of the field, and every fowl of the air; and brought them unto Adam to see what he would call them: and whatsoever Adam called every living creature, that was the name thereof.",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 2,
+      "verse": 20,
+      "text": "And Adam gave names to all cattle, and to the fowl of the air, and to every beast of the field; but for Adam there was not found a help meet for him.",
+      "page": 8,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 3,
+      "verse": 21,
+      "text": "And the Lord God caused a deep sleep to fall upon Adam, and he slept; and he took one of his ribs, and closed up the flesh instead thereof.",
+      "page": 9,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 3,
+      "verse": 22,
+      "text": "And the rib, which the Lord God had taken from man, made he a woman, and brought her unto the man.",
+      "page": 9,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 3,
+      "verse": 23,
+      "text": "And Adam said, This is now bone of my bones, and flesh of my flesh: she shall be called Woman [heb. Isha], because she was taken out of Man [heb. Ish].",
+      "page": 9,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 3,
+      "verse": 24,
+      "text": "Therefore shall a man leave his father and his mother, and shall cleave unto his wife: and they shall be one flesh.",
+      "page": 9,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 3,
+      "verse": 25,
+      "text": "And they were both naked, the man and his wife, and were not ashamed.",
+      "page": 9,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 3,
+      "verse": 1,
+      "text": "Now the serpent was more subtile than any beast of the field which the Lord God had made. And he said unto the woman, Yea, hath God said, Ye shall not eat of every tree of the garden?",
+      "page": 9,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 3,
+      "verse": 2,
+      "text": "And the woman said unto the serpent, We may eat of the fruit of the trees of the garden:",
+      "page": 9,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 3,
+      "verse": 3,
+      "text": "but of the fruit of the tree which is in the midst of the garden, God hath said, Ye shall not eat of it, neither shall ye touch it, lest ye die.",
+      "page": 9,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 3,
+      "verse": 4,
+      "text": "And the serpent said unto the woman, Ye shall not surely die:",
+      "page": 9,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 3,
+      "verse": 5,
+      "text": "for God doth know that in the day ye eat thereof, then your eyes shall be opened, and ye shall be as gods, knowing good and evil.",
+      "page": 9,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 3,
+      "verse": 6,
+      "text": "And when the woman saw that the tree was good for food, and that it was pleasant to the eyes, and a tree to be desired to make one wise, she took of the fruit thereof, and did eat, and gave also unto her husband with her; and he did eat.",
+      "page": 9,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 3,
+      "verse": 7,
+      "text": "And the eyes of them both were opened, and they knew that they were naked; and they sewed fig leaves together, and made themselves aprons.",
+      "page": 9,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 4,
+      "verse": 1,
+      "text": "And Adam knew Eve his wife; and she conceived, and bare Cain [gotten, or acquired], and said, I have gotten a man from the Lord.",
+      "page": 11,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 4,
+      "verse": 2,
+      "text": "And she again bare his brother Abel. And Abel was a keeper of sheep, but Cain was a tiller of the ground.",
+      "page": 11,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 4,
+      "verse": 3,
+      "text": "And in process of time it came to pass, that Cain brought of the fruit of the ground an offering unto the Lord.",
+      "page": 11,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 4,
+      "verse": 4,
+      "text": "And Abel, he also brought of the firstlings of his flock and of the fat thereof. And the Lord had respect unto Abel and to his offering:",
+      "page": 11,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 4,
+      "verse": 5,
+      "text": "but unto Cain and to his offering he had not respect. And Cain was very wroth, and his countenance fell.",
+      "page": 11,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 4,
+      "verse": 6,
+      "text": "And the Lord said unto Cain, Why art thou wroth? and why is thy countenance fallen?",
+      "page": 11,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 14,
+      "verse": 10,
+      "text": "And the vale of Siddim was full of slime pits; and the kings of Sodom and Gomorrah fled, and fell there; and they that remained fled to the mountain.",
+      "page": 31,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 14,
+      "verse": 11,
+      "text": "And they took all the goods of Sodom and Gomorrah, and all their victuals, and went their way.",
+      "page": 31,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 14,
+      "verse": 12,
+      "text": "And they took Lot, Abram\u2019s brother\u2019s son, who dwelt in Sodom, and his goods, and departed.",
+      "page": 31,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 14,
+      "verse": 13,
+      "text": "\u00b6 And there came one that had escaped, and told Abram the Hebrew; for he dwelt in the plain of Mamre the Amorite, brother of Eshcol, and brother of Aner: and these were confederate with Abram.",
+      "page": 31,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 14,
+      "verse": 14,
+      "text": "And when Abram heard that his brother was taken captive, he armed his trained servants, born in his own house, three hundred and eighteen, and pursued them unto Dan.",
+      "page": 31,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 14,
+      "verse": 15,
+      "text": "And he divided himself against them, he and his servants, by night, and smote them, and pursued them unto Hobah, which is on the left hand of Damascus.",
+      "page": 31,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 14,
+      "verse": 16,
+      "text": "And he brought back all the goods, and also brought again his brother Lot, and his goods, and the women also, and the people.",
+      "page": 31,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 14,
+      "verse": 17,
+      "text": "\u00b6 And the king of Sodom went out to meet him, after his return from the slaughter of Chedorlaomer and of the kings that were with him, at the valley of Shaveh, which is the king\u2019s dale.",
+      "page": 31,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 14,
+      "verse": 18,
+      "text": "And Melchizedek king of Salem brought forth bread and wine: and he was the priest of the most high God.",
+      "page": 31,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 14,
+      "verse": 19,
+      "text": "And he blessed him, and said, Blessed be Abram of the most high God, possessor of heaven and earth:",
+      "page": 31,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 14,
+      "verse": 20,
+      "text": "and blessed be the most high God, which hath delivered thine enemies into thy hand. And he gave him tithes of all.",
+      "page": 31,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 14,
+      "verse": 21,
+      "text": "And the king of Sodom said unto Abram, Give me the persons, and take the goods to thyself.",
+      "page": 31,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 15,
+      "verse": 1,
+      "text": "After these things the word of the Lord came unto Abram in a vision, saying, Fear not, Abram: I am thy shield, and thy exceeding great reward.",
+      "page": 32,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 15,
+      "verse": 2,
+      "text": "And Abram said, Lord God, what wilt thou give me, seeing I go childless, and the steward of my house is this Eliezer of Damascus?",
+      "page": 32,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 15,
+      "verse": 3,
+      "text": "And Abram said, Behold, to me thou hast given no seed: and, lo, one born in my house is mine heir.",
+      "page": 32,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 15,
+      "verse": 4,
+      "text": "And, behold, the word of the Lord came unto him, saying, This shall not be thine heir; but he that shall come forth out of thine own bowels shall be thine heir.",
+      "page": 32,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 15,
+      "verse": 5,
+      "text": "And he brought him forth abroad, and said, Look now toward heaven, and tell the stars, if thou be able to number them: and he said unto him, So shall thy seed be.",
+      "page": 32,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 15,
+      "verse": 6,
+      "text": "And he believed in the Lord; and he counted it to him for righteousness.",
+      "page": 32,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 15,
+      "verse": 7,
+      "text": "And he said unto him, I am the Lord that brought thee out of Ur of the Chaldees, to give thee this land to inherit it.",
+      "page": 32,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 15,
+      "verse": 8,
+      "text": "And he said, Lord God, whereby shall I know that I shall inherit it?",
+      "page": 32,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 23,
+      "verse": 20,
+      "text": "And it came to pass after these things, that it was told Abraham, saying, Behold, Milcah, she hath also borne children unto thy brother Nahor;",
+      "page": 49,
+      "confidence": 0.98
+    },
+    {
+      "book": "Genesis",
+      "chapter": 23,
+      "verse": 21,
+      "text": "Huz his firstborn, and Buz his brother, and Kemuel the father of Aram,",
+      "page": 49,
+      "confidence": 0.99
+    },
+    {
+      "book": "Genesis",
+      "chapter": 23,
+      "verse": 22,
+      "text": "and Chesed, and Hazo, and Pildash, and Jidlaph, and Bethuel.",
+      "page": 49,
+      "confidence": 0.99
+    },
+    {
+      "book": "Genesis",
+      "chapter": 23,
+      "verse": 23,
+      "text": "And Bethuel begat Rebekah: these eight Milcah did bear to Nahor, Abraham\u2019s brother.",
+      "page": 49,
+      "confidence": 0.98
+    },
+    {
+      "book": "Genesis",
+      "chapter": 23,
+      "verse": 24,
+      "text": "And his concubine, whose name was Reumah, she bare also Tebah, and Gaham, and Thahash, and Maachah.",
+      "page": 49,
+      "confidence": 0.97
+    },
+    {
+      "book": "Genesis",
+      "chapter": 23,
+      "verse": 1,
+      "text": "And Sarah was a hundred and seven and twenty years old: these were the years of the life of Sarah.",
+      "page": 49,
+      "confidence": 0.99
+    },
+    {
+      "book": "Genesis",
+      "chapter": 23,
+      "verse": 2,
+      "text": "And Sarah died in Kirjath-arba; the same is Hebron in the land of Canaan: and Abraham came to mourn for Sarah, and to weep for her.",
+      "page": 49,
+      "confidence": 0.99
+    },
+    {
+      "book": "Genesis",
+      "chapter": 23,
+      "verse": 3,
+      "text": "And Abraham stood up from before his dead, and spake unto the sons of Heth, saying,",
+      "page": 49,
+      "confidence": 0.98
+    },
+    {
+      "book": "Genesis",
+      "chapter": 23,
+      "verse": 4,
+      "text": "I am a stranger and a sojourner with you: give me a possession of a buryingplace with you, that I may bury my dead out of my sight.",
+      "page": 49,
+      "confidence": 0.99
+    },
+    {
+      "book": "Genesis",
+      "chapter": 23,
+      "verse": 5,
+      "text": "And the children of Heth answered Abraham, saying unto him,",
+      "page": 49,
+      "confidence": 0.98
+    },
+    {
+      "book": "Genesis",
+      "chapter": 23,
+      "verse": 6,
+      "text": "Hear us, my lord: thou art a mighty prince among us: in the choice of our sepulchres bury thy dead; none of us shall withhold from thee his sepulchre, but that thou mayest bury thy dead.",
+      "page": 49,
+      "confidence": 0.99
+    },
+    {
+      "book": "Genesis",
+      "chapter": 23,
+      "verse": 7,
+      "text": "And Abraham stood up, and bowed himself to the people of the land, even to the children of Heth.",
+      "page": 49,
+      "confidence": 0.99
+    },
+    {
+      "book": "Genesis",
+      "chapter": 23,
+      "verse": 8,
+      "text": "And he communed with them, saying, If it be your mind that I should bury my dead out of my sight, hear me, and entreat for me to Ephron the son of Zohar,",
+      "page": 49,
+      "confidence": 0.98
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 1,
+      "text": "And Abraham was old, and well stricken in age: and the Lord had blessed Abraham in all things.",
+      "page": 51,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 2,
+      "text": "And Abraham said unto his eldest servant of his house, that ruled over all that he had, Put, I pray thee, thy hand under my thigh:",
+      "page": 51,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 3,
+      "text": "and I will make thee swear by the Lord, the God of heaven, and the God of the earth, that thou shalt not take a wife unto my son of the daughters of the Canaanites, among whom I dwell:",
+      "page": 51,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 4,
+      "text": "but thou shalt go unto my country, and to my kindred, and take a wife unto my son Isaac.",
+      "page": 51,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 5,
+      "text": "And the servant said unto him, Peradventure the woman will not be willing to follow me unto this land: must I needs bring thy son again unto the land from whence thou camest?",
+      "page": 51,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 6,
+      "text": "And Abraham said unto him, Beware thou that thou bring not my son thither again.",
+      "page": 51,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 7,
+      "text": "The Lord God of heaven, which took me from my father\u2019s house, and from the land of my kindred, and which spake unto me, and that sware unto me, saying, Unto thy seed will I give this land; he shall send his angel before thee, and thou shalt take a wife unto my son from thence.",
+      "page": 51,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 8,
+      "text": "And if the woman will not be willing to follow thee, then thou shalt be clear from this my oath: only bring not my son thither again.",
+      "page": 51,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 9,
+      "text": "And the servant put his hand under the thigh of Abraham his master, and sware to him concerning that matter.",
+      "page": 51,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 10,
+      "text": "And the servant took ten camels of the camels of his master, and departed; for all the goods of his master were in his hand: and he arose, and went to Mesopotamia, unto the city of Nahor.",
+      "page": 51,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 11,
+      "text": "And he made his camels to kneel down without the city by a well of water at the time of the evening, even the time that women go out to draw water.",
+      "page": 51,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 12,
+      "text": "And he said, O Lord God of my master Abraham, I pray thee, send me good speed this day, and show kindness unto my master Abraham.",
+      "page": 52,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 13,
+      "text": "Behold, I stand here by the well of water; and the daughters of the men of the city come out to draw water:",
+      "page": 52,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 14,
+      "text": "and let it come to pass, that the damsel to whom I shall say, Let down thy pitcher, I pray thee, that I may drink; and she shall say, Drink, and I will give thy camels drink also: let the same be she that thou hast appointed for thy servant Isaac; and thereby shall I know that thou hast showed kindness unto my master.",
+      "page": 52,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 15,
+      "text": "And it came to pass, before he had done speaking, that, behold, Rebekah came out, who was born to Bethuel, son of Milcah, the wife of Nahor, Abraham\u2019s brother, with her pitcher upon her shoulder.",
+      "page": 52,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 16,
+      "text": "And the damsel was very fair to look upon, a virgin, neither had any man known her: and she went down to the well, and filled her pitcher, and came up.",
+      "page": 52,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 17,
+      "text": "And the servant ran to meet her, and said, Let me, I pray thee, drink a little water of thy pitcher.",
+      "page": 52,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 18,
+      "text": "And she said, Drink, my lord: and she hasted, and let down her pitcher upon her hand, and gave him drink.",
+      "page": 52,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 19,
+      "text": "And when she had done giving him drink, she said, I will draw water for thy camels also, until they have done drinking.",
+      "page": 52,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 20,
+      "text": "And she hasted, and emptied her pitcher into the trough, and ran again unto the well to draw water, and drew for all his camels.",
+      "page": 52,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 21,
+      "text": "And the man wondering at her held his peace, to wit whether the Lord had made his journey prosperous or not.",
+      "page": 52,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 22,
+      "text": "And it came to pass, as the camels had done drinking, that the man took a golden earring of half a shekel weight, and two bracelets for her hands of ten shekels weight of gold;",
+      "page": 52,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 23,
+      "text": "and said, Whose daughter art thou? tell me, I pray thee: is there room in thy father\u2019s house for us to lodge in?",
+      "page": 52,
+      "confidence": 1.0
+    },
+    {
+      "book": "Genesis",
+      "chapter": 24,
+      "verse": 24,
+      "text": "And she said unto him, I am the daughter of Bethuel the son of Milcah, which she bare unto Nahor.",
+      "page": 52,
+      "confidence": 1.0
+    }
+  ]
+}

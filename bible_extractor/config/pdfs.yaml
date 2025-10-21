@@ -1,0 +1,30 @@
+pdfs:
+  kjv:
+    format: "verse_start_lines"
+    header_pattern: "^\\d+\\s+([A-Za-z\\s]+?)\\s+(\\d+)$"
+    verse_pattern: "^(\\d+)\\s+(.+)"
+    description: "King James Version - verses start each line with numbers"
+    
+  nrsv:
+    format: "inline_verses"
+    header_pattern: "^[A-Z\\s]+$"
+    verse_pattern: "\\s(\\d+)\\s"
+    description: "New Revised Standard Version - inline verse numbers"
+    
+  esv:
+    format: "compact_inline"
+    header_pattern: "^[A-Z][a-z]+\\s+\\d+$"
+    verse_pattern: "(\\d+)[A-Za-z]"
+    description: "English Standard Version - compact inline verses"
+
+# Auto-detection patterns
+auto_detection:
+  book_name_patterns:
+    - "^[A-Z][a-z]+(?:\\s+[A-Z][a-z]+)*"  # Capitalized words
+    - "\\b(Genesis|Exodus|Leviticus|Numbers|Deuteronomy)\\b"  # Common books
+    - "\\b(Matthew|Mark|Luke|John|Acts|Romans)\\b"  # NT books
+    
+  chapter_indicators:
+    - "^\\d+$"  # Standalone numbers
+    - "\\bChapter\\s+\\d+\\b"  # "Chapter 1"
+    - "\\b\\d+\\b.*\\bverses?\\b"  # "25 verses"

@@ -1,0 +1,19 @@
+[Unit]
+Description=Bible Verse Notifier
+Description=Shows hourly bible verses with audio notifications
+
+[Service]
+Type=oneshot
+Environment=DISPLAY=:0
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+Environment=XDG_SESSION_TYPE=wayland
+Environment=GNOME_SHELL_SESSION_MODE=ubuntu
+WorkingDirectory=/home/asabaal/repos/religious-texts
+ExecStart=/home/asabaal/python_env/religous_texts_env/bin/python /home/asabaal/repos/religious-texts/verse_notifier.py --cron
+StandardOutput=append:/home/asabaal/repos/religious-texts/verse_service.log
+StandardError=append:/home/asabaal/repos/religious-texts/verse_service.log
+
+[Install]
+WantedBy=timer.target
