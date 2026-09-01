@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Bible Verse Notifier every hour
+Requires=verse-notifier.service
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+
+[Install]
+WantedBy=timers.target

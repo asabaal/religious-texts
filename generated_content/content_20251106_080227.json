@@ -1,0 +1,74 @@
+{
+  "timestamp": "2025-11-06T08:02:27.782478",
+  "config": {
+    "count": 3,
+    "concepts": [
+      "Finding Hope in Uncertainty",
+      "Power of Christian Community",
+      "Overcoming Spiritual Anxiety"
+    ],
+    "use_news": true,
+    "model": "qwen3:latest"
+  },
+  "news_sentiment": {
+    "overall_sentiment": "neutral_positive",
+    "trending_topics": [
+      {
+        "topic": "faith",
+        "frequency": 8,
+        "sentiment": 0.7,
+        "relevance": 0.9
+      },
+      {
+        "topic": "community",
+        "frequency": 6,
+        "sentiment": 0.8,
+        "relevance": 0.8
+      },
+      {
+        "topic": "anxiety",
+        "frequency": 5,
+        "sentiment": -0.3,
+        "relevance": 0.7
+      },
+      {
+        "topic": "leadership",
+        "frequency": 4,
+        "sentiment": 0.2,
+        "relevance": 0.6
+      },
+      {
+        "topic": "prayer",
+        "frequency": 7,
+        "sentiment": 0.5,
+        "relevance": 0.8
+      }
+    ],
+    "recommended_themes": [
+      "Finding Hope in Uncertainty",
+      "Power of Christian Community",
+      "Overcoming Spiritual Anxiety",
+      "Leadership Lessons from Scripture",
+      "Daily Prayer and Devotion"
+    ],
+    "audience_concerns": [
+      "Economic uncertainty affecting faith",
+      "Social isolation and need for connection",
+      "Political division and Christian response",
+      "Mental health and spiritual wellness"
+    ]
+  },
+  "generation_result": {
+    "success": false,
+    "error": "Traceback (most recent call last):\n  File \"/home/asabaal/repos/religious-texts/temp_generate.py\", line 15, in <module>\n    from rag import ensure_indexes, get_passage_texts_by_ref\n  File \"/home/asabaal/repos/religious-texts/rag.py\", line 20, in <module>\n    import nltk\nModuleNotFoundError: No module named 'nltk'\n"
+  },
+  "summary": {
+    "requested_concepts": 3,
+    "concepts_used": [
+      "Finding Hope in Uncertainty",
+      "Power of Christian Community",
+      "Overcoming Spiritual Anxiety"
+    ],
+    "success": false
+  }
+}

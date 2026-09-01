@@ -1,0 +1,1 @@
+verse_notifier_simple.py

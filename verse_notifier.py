@@ -225,16 +225,19 @@ def prepare_audio_file(tts_message, high_quality_tts):
             temp_audio = "temp_verse.mp3"
             tts = gTTS(text=tts_message, lang='en', slow=False)
             tts.save(temp_audio)
+            print("✅ Google TTS audio prepared successfully")
             return temp_audio
         elif high_quality_tts and high_quality_tts not in ["gtts", "gtts_headless"]:
             # Use Coqui TTS for high-quality speech
             temp_audio = "temp_verse.wav"
             high_quality_tts.tts_to_file(text=tts_message, file_path=temp_audio)
+            print("✅ Coqui TTS audio prepared successfully")
             return temp_audio
         else:
+            print("⚠️ No high-quality TTS available, will use fallback")
             return None
     except Exception as e:
-        print(f"Audio preparation failed: {e}")
+        print(f"❌ Google TTS failed ({e}) - falling back to pyttsx3 (lower quality)")
         return None
 
 def play_audio_file(audio_file, high_quality_tts):
@@ -366,7 +369,7 @@ def show_verse_zenity(verses, engine, high_quality_tts=None):
         try:
             notification.notify(
                 title=title,
-                message=display_text[:200] + "..." if len(display_text) > 200 else display_text,
+                message=display_text,
                 timeout=10  # Show for 10 seconds
             )
         except Exception as e:
@@ -381,11 +384,14 @@ def show_verse_zenity(verses, engine, high_quality_tts=None):
 
 def show_verse(verses, engine, high_quality_tts=None):
     """Displays a verse and reads it aloud."""
-    # Check if zenity is available
+    # Check if zenity is available and we have a display
     try:
         subprocess.run(['which', 'zenity'], check=True, capture_output=True)
-        show_verse_zenity(verses, engine, high_quality_tts)
+        if os.environ.get('DISPLAY') or os.environ.get('WAYLAND_DISPLAY'):
+            show_verse_zenity(verses, engine, high_quality_tts)
+            return
     except (subprocess.CalledProcessError, FileNotFoundError):
+        pass
         # Fallback to original method
         # Prefer verses with proper verse numbers over ones with ?
         proper_verses = [v for v in verses if re.search(r'\d+:\d+', v)]
@@ -448,7 +454,7 @@ def show_verse(verses, engine, high_quality_tts=None):
         try:
             notification.notify(
                 title=title,
-                message=display_message[:200] + "..." if len(display_message) > 200 else display_message,
+                message=display_message,
                 timeout=10  # Show for 10 seconds
             )
         except Exception as e:
@@ -465,7 +471,7 @@ def main():
     parser = argparse.ArgumentParser(description="Bible Verse Notifier")
     parser.add_argument("--extract", action="store_true", help="Extract text from PDF before starting")
     parser.add_argument("--pdf", default="new-revised-standard-version.pdf", help="Path to Bible PDF file")
-    parser.add_argument("--txt", default="kjv_bible.txt", help="Output text file name")
+    parser.add_argument("--txt", default="kjv_bible_filtered.txt", help="Output text file name")
     parser.add_argument("--test", action="store_true", help="Test with one verse then exit")
     parser.add_argument("--cron", action="store_true", help="Run once for cron job (no continuous loop)")
     args = parser.parse_args()

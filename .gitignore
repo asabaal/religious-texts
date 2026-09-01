@@ -56,3 +56,15 @@ venv.bak/
 # Project specific
 data/*
 !data/.gitkeep
+
+# Repository cleanup snapshot — 2026-09-01
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.claude/settings.local.json
+# Generated documentation
+docs/_build/
+# Runtime logs
+*.log
+# Local/source-book PDFs are not repository source
+*.pdf

@@ -600,10 +600,301 @@
                     <div class="stat-label">3x Content Output</div>
                 </div>
             </div>
+        </section>
 
-            <div style="text-align: center; margin-top: 30px;">
-                <p style="margin-bottom: 20px;"><strong>Run the enhanced system yourself:</strong></p>
-                <code style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; display: block; margin: 0 auto; max-width: 400px;">python generate_content_with_angles.py</code>
+        <section class="section">
+            <h2>📖 How to Use the Biblical Content Agent</h2>
+            
+            <div class="enhancement-banner">
+                <h3>🚀 Complete Setup & Usage Guide</h3>
+                <p>Everything you need to start generating AI-powered biblical content</p>
+            </div>
+
+            <h3>🔧 Prerequisites & Setup</h3>
+            <div class="comparison">
+                <h4>1. Install Ollama & Llama 3.1 8B</h4>
+                <div class="terminal">
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> # Install Ollama (if not already installed)</div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> curl -fsSL https://ollama.ai/install.sh | sh</div>
+                    <div class="terminal-line"></div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> # Pull the Llama 3.1 8B model</div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> ollama pull llama3.1:8b</div>
+                    <div class="terminal-line"></div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> # Start Ollama service</div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> ollama serve</div>
+                </div>
+
+                <h4>2. Install Python Dependencies</h4>
+                <div class="terminal">
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> # Install required packages</div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> pip install requests nltk scikit-learn</div>
+                    <div class="terminal-line"></div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> # Download NLTK data (first time only)</div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"</div>
+                </div>
+            </div>
+
+            <h3>🎬 Quick Start - Generate Your First Content</h3>
+            
+            <div class="content-item">
+                <div class="concept-header">
+                    <div class="concept-title">Option 1: Generate Multi-Angle Content</div>
+                    <div class="passage-ref">Recommended for maximum creative options</div>
+                </div>
+                
+                <div class="terminal">
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> python generate_content_with_angles.py</div>
+                    <div class="terminal-line">🎬 Biblical Content Generator with Multiple Narrative Angles</div>
+                    <div class="terminal-line">============================================================</div>
+                    <div class="terminal-line">🎯 Generating angles for: God's Unconditional Love</div>
+                    <div class="terminal-line">✅ Generated 3 narrative angles</div>
+                    <div class="terminal-line">💾 Saved to: multi_angle_content_1_Gods_Unconditional_Love.json</div>
+                    <div class="terminal-line">🎉 Generated content with multiple angles for 5 passages!</div>
+                </div>
+                
+                <div class="justification">
+                    <strong>What this does:</strong> Creates 5 biblical passages, each with 3 distinct narrative angles, complete with target audience analysis, justifications, and tailored scripts.
+                </div>
+            </div>
+
+            <div class="content-item">
+                <div class="concept-header">
+                    <div class="concept-title">Option 2: Generate Single Content Items</div>
+                    <div class="passage-ref">Perfect for quick content creation</div>
+                </div>
+                
+                <div class="terminal">
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> python content_agent_optimized.py</div>
+                    <div class="terminal-line">Initializing content generation system...</div>
+                    <div class="terminal-line">Generating concepts...</div>
+                    <div class="terminal-line">Generated 3 concepts: ['God's Unconditional Love', 'Faith in Difficult Times', 'Power of Forgiveness']</div>
+                    <div class="terminal-line">Processing concept 1: God's Unconditional Love</div>
+                    <div class="terminal-line">✓ Generated option for 'God's Unconditional Love'</div>
+                    <div class="terminal-line">🎉 Generated 3 content options!</div>
+                </div>
+                
+                <div class="justification">
+                    <strong>What this does:</strong> Generates 3 complete content items with concepts, scripts, and quality evaluations. Great for testing the system.
+                </div>
+            </div>
+
+            <div class="content-item">
+                <div class="concept-header">
+                    <div class="concept-title">Option 3: Test Individual Components</div>
+                    <div class="passage-ref">For debugging and development</div>
+                </div>
+                
+                <div class="terminal">
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> python test_content_agent.py</div>
+                    <div class="terminal-line">🧪 Testing Biblical Content Agent Components</div>
+                    <div class="terminal-line">================================================</div>
+                    <div class="terminal-line">✅ Ollama API Connection: SUCCESS</div>
+                    <div class="terminal-line">✅ RAG Functions: All working</div>
+                    <div class="terminal-line">✅ Concept Generation: Working</div>
+                    <div class="terminal-line">✅ Script Generation: Working</div>
+                    <div class="terminal-line">✅ Evaluation System: Working</div>
+                </div>
+                
+                <div class="justification">
+                    <strong>What this does:</strong> Tests each component of the system to ensure everything is working correctly.
+                </div>
+            </div>
+
+            <h3>📁 Understanding Generated Files</h3>
+            
+            <div class="comparison">
+                <h4>Multi-Angle Content Structure</h4>
+                <div class="file-item">
+                    <strong>multi_angle_content_[theme].json</strong> - Contains 3 angles for one biblical passage
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 0.9em;">
+{
+  "concept": "God's Unconditional Love",
+  "passage": "John 3:16",
+  "text": "For God so loved the world...",
+  "narrative_angles": [
+    {
+      "angle_info": {
+        "angle": "A Mother's Unwavering Sacrifice",
+        "justification": "Highlights God's selfless love...",
+        "target_audience": "Young parents, mothers"
+      },
+      "script": "Hook: Will you love your child more than life?...",
+      "evaluation": {"scores": {...}, "why": "Good content"}
+    }
+    // ... 2 more angles
+  ],
+  "total_angles": 3
+}
+                </div>
+
+                <h4>Single Content Structure</h4>
+                <div class="file-item">
+                    <strong>generated_content_[number]_[theme].json</strong> - Contains one complete content item
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 0.9em;">
+{
+  "concept": "God's Unconditional Love",
+  "passage": "John 3:16",
+  "text": "For God so loved the world...",
+  "script": "Hook: God's love knows no bounds...",
+  "evaluation": {"scores": {"Engagement": 7, "Clarity": 7, "Authenticity": 7}, "why": "Good content"},
+  "translation": "ESV"
+}
+                </div>
+            </div>
+
+            <h3>🎯 Customization Options</h3>
+            
+            <div class="angles-container">
+                <div class="angle-card">
+                    <div class="angle-title">📝 Add Custom Concepts</div>
+                    <div class="script-content">
+                        Edit <code>generate_content_with_angles.py</code> and modify the <code>concepts</code> list:
+                        <div style="background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px; margin: 10px 0; font-family: monospace; font-size: 0.85em;">
+concepts = [
+    "Your Custom Theme 1",
+    "Your Custom Theme 2", 
+    "Your Custom Theme 3"
+]
+                        </div>
+                    </div>
+                </div>
+
+                <div class="angle-card">
+                    <div class="angle-title">🎛️ Adjust Generation Parameters</div>
+                    <div class="script-content">
+                        Modify the generation settings in the scripts:
+                        <div style="background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px; margin: 10px 0; font-family: monospace; font-size: 0.85em;">
+# Number of concepts to generate
+NUM_CONCEPTS = 5
+
+# Number of angles per concept  
+ANGLES_PER_CONCEPT = 3
+
+# Model temperature (0.1-1.0)
+TEMPERATURE = 0.7
+                        </div>
+                    </div>
+                </div>
+
+                <div class="angle-card">
+                    <div class="angle-title">📚 Add More Bible Passages</div>
+                    <div class="script-content">
+                        Extend the biblical data in <code>rag.py</code>:
+                        <div style="background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px; margin: 10px 0; font-family: monospace; font-size: 0.85em;">
+biblical_data = [
+    {"reference": "Your Passage", "text": "Full text...", "book": "Book"},
+    # Add more passages...
+]
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>🚀 Advanced Usage</h3>
+            
+            <div class="comparison">
+                <h4>Generate Content for Specific Themes</h4>
+                <div class="terminal">
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> # Create a custom script for specific themes</div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> cat > generate_custom.py << 'EOF'</div>
+                    <div class="terminal-line">from content_agent_optimized import *</div>
+                    <div class="terminal-line">from rag import *</div>
+                    <div class="terminal-line"></div>
+                    <div class="terminal-line">ensure_indexes()</div>
+                    <div class="terminal-line">custom_concepts = ["Grace", "Redemption", "Hope"]</div>
+                    <div class="terminal-line">for concept in custom_concepts:</div>
+                    <div class="terminal-line">    # Generate content for each concept</div>
+                    <div class="terminal-line">    passages = search_passages_for_concept(concept)</div>
+                    <div class="terminal-line">    # ... continue with generation</div>
+                    <div class="terminal-line">EOF</div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> python generate_custom.py</div>
+                </div>
+
+                <h4>Batch Processing</h4>
+                <div class="terminal">
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> # Generate multiple batches</div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> for i in {1..5}; do</div>
+                    <div class="terminal-line">    python generate_content_with_angles.py</div>
+                    <div class="terminal-line">    mv multi_angle_content_*.json batch_$i/</div>
+                    <div class="terminal-line">done</div>
+                </div>
+            </div>
+
+            <h3>🔍 Viewing Results</h3>
+            
+            <div class="content-item">
+                <div class="concept-header">
+                    <div class="concept-title">Interactive Demo</div>
+                    <div class="passage-ref">Best way to explore generated content</div>
+                </div>
+                
+                <div class="terminal">
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> # Open the interactive demo in your browser</div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> python -m webbrowser demo_multi_angle.html</div>
+                    <div class="terminal-line"></div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> # Or open manually:</div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> # Navigate to file:///home/asabaal/repos/religious-texts/demo_multi_angle.html</div>
+                </div>
+            </div>
+
+            <div class="content-item">
+                <div class="concept-header">
+                    <div class="concept-title">Command Line Viewing</div>
+                    <div class="passage-ref">Quick inspection of generated files</div>
+                </div>
+                
+                <div class="terminal">
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> # View summary of all generated content</div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> cat multi_angle_content_summary.json | jq '.[] | {concept: .concept, total_angles: .total_angles}'</div>
+                    <div class="terminal-line"></div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> # View specific content details</div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> cat multi_angle_content_1_Gods_Unconditional_Love.json | jq '.narrative_angles[].angle_info'</div>
+                    <div class="terminal-line"></div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> # Count total generated angles</div>
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> cat multi_angle_content_*.json | jq '.total_angles' | awk '{sum += $1} END {print "Total angles:", sum}'</div>
+                </div>
+            </div>
+
+            <h3>🛠️ Troubleshooting</h3>
+            
+            <div class="comparison">
+                <h4>Common Issues & Solutions</h4>
+                
+                <div style="margin: 15px 0;">
+                    <strong>❌ "Ollama connection failed"</strong><br>
+                    <div class="justification">
+                        Solution: Make sure Ollama is running with <code>ollama serve</code> and the model is installed with <code>ollama pull llama3.1:8b</code>
+                    </div>
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <strong>❌ "No passages found for concept"</strong><br>
+                    <div class="justification">
+                        Solution: The concept might be too specific. Try broader terms or add more biblical passages to <code>rag.py</code>
+                    </div>
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <strong>❌ "JSON parsing error"</strong><br>
+                    <div class="justification">
+                        Solution: The AI response might be malformed. The system includes fallbacks, but you can try regenerating or adjusting the temperature parameter.
+                    </div>
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <strong>❌ "NLTK data not found"</strong><br>
+                    <div class="justification">
+                        Solution: Run <code>python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"</code> to download required data.
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="button" onclick="window.open('demo_multi_angle.html', '_blank')">🎬 Open Interactive Demo</button>
+                <button class="button" onclick="window.open('content_agent_optimized.py', '_blank')">⚡ View Main Script</button>
+                <button class="button" onclick="window.open('rag.py', '_blank')">🔍 View RAG Module</button>
             </div>
         </section>
     </div>

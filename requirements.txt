@@ -16,6 +16,14 @@ plotly>=5.0.0
 textblob>=0.15.0
 gensim>=4.0.0
 tqdm>=4.60.0
+# High-quality TTS alternatives
+gTTS>=2.5.0
+pygame>=2.6.0
+
+# Coqui TTS (for Python < 3.12)
+# TTS>=0.13.0
+# torchaudio>=2.0.0
+# espeak-ng>=1.50
 
 # Development dependencies
 pytest>=6.2.0

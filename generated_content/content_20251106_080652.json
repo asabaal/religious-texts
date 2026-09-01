@@ -1,0 +1,74 @@
+{
+  "timestamp": "2025-11-06T08:06:52.337414",
+  "config": {
+    "count": 3,
+    "concepts": [
+      "Finding Hope in Uncertainty",
+      "Power of Christian Community",
+      "Overcoming Spiritual Anxiety"
+    ],
+    "use_news": true,
+    "model": "qwen3:latest"
+  },
+  "news_sentiment": {
+    "overall_sentiment": "neutral_positive",
+    "trending_topics": [
+      {
+        "topic": "faith",
+        "frequency": 8,
+        "sentiment": 0.7,
+        "relevance": 0.9
+      },
+      {
+        "topic": "community",
+        "frequency": 6,
+        "sentiment": 0.8,
+        "relevance": 0.8
+      },
+      {
+        "topic": "anxiety",
+        "frequency": 5,
+        "sentiment": -0.3,
+        "relevance": 0.7
+      },
+      {
+        "topic": "leadership",
+        "frequency": 4,
+        "sentiment": 0.2,
+        "relevance": 0.6
+      },
+      {
+        "topic": "prayer",
+        "frequency": 7,
+        "sentiment": 0.5,
+        "relevance": 0.8
+      }
+    ],
+    "recommended_themes": [
+      "Finding Hope in Uncertainty",
+      "Power of Christian Community",
+      "Overcoming Spiritual Anxiety",
+      "Leadership Lessons from Scripture",
+      "Daily Prayer and Devotion"
+    ],
+    "audience_concerns": [
+      "Economic uncertainty affecting faith",
+      "Social isolation and need for connection",
+      "Political division and Christian response",
+      "Mental health and spiritual wellness"
+    ]
+  },
+  "generation_result": {
+    "success": true,
+    "output": "\ud83c\udfac Biblical Content Generator with Multiple Narrative Angles\n============================================================\nIndexed 22 biblical passages for search.\n\n==================== Content Item 1 ====================\n\ud83d\udcdc Passage: John 3:16\n\ud83d\udcd6 Text: For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.\n\ud83c\udfaf Generating angles for: God's Unconditional Love\n\u2705 Generated 3 narrative angles\n   \ud83d\udcdd Creating script for angle 1: Personal Faith Journey\n   \u2705 Completed angle 1\n   \ud83d\udcdd Creating script for angle 2: Modern Life Application\n   \u2705 Completed angle 2\n   \ud83d\udcdd Creating script for angle 3: Hope and Encouragement\n   \u2705 Completed angle 3\n\ud83d\udcbe Saved to: multi_angle_content_1_Gods_Unconditional_Love.json\n\n\ud83d\udcca Summary for God's Unconditional Love:\n   1. Personal Faith Journey (Score: 28)\n      Target: Young adults seeking authentic faith\n   2. Modern Life Application (Score: 28)\n      Target: Working professionals and parents\n   3. Hope and Encouragement (Score: 28)\n      Target: People going through life challenges\n\n==================== Content Item 2 ====================\n\ud83d\udcdc Passage: Romans 8:28\n\ud83d\udcd6 Text: And we know that in all things God works for the good of those who love him, who have been called according to his purpose.\n\ud83c\udfaf Generating angles for: Finding Purpose in Suffering\n\u2705 Generated 3 narrative angles\n   \ud83d\udcdd Creating script for angle 1: Personal Faith Journey\n   \u2705 Completed angle 1\n   \ud83d\udcdd Creating script for angle 2: Modern Life Application\n   \u2705 Completed angle 2\n   \ud83d\udcdd Creating script for angle 3: Hope and Encouragement\n   \u2705 Completed angle 3\n\ud83d\udcbe Saved to: multi_angle_content_2_Finding_Purpose_in_Suffering.json\n\n\ud83d\udcca Summary for Finding Purpose in Suffering:\n   1. Personal Faith Journey (Score: 28)\n      Target: Young adults seeking authentic faith\n   2. Modern Life Application (Score: 28)\n      Target: Working professionals and parents\n   3. Hope and Encouragement (Score: 28)\n      Target: People going through life challenges\n\n==================== Content Item 3 ====================\n\ud83d\udcdc Passage: Matthew 5:5\n\ud83d\udcd6 Text: Blessed are the meek, for they will inherit the earth.\n\ud83c\udfaf Generating angles for: The Power of Humility\n\u2705 Generated 3 narrative angles\n   \ud83d\udcdd Creating script for angle 1: From Weakness to Strength\n   \u2705 Completed angle 1\n   \ud83d\udcdd Creating script for angle 2: The Unexpected Heirs of God's Kingdom\n   \u2705 Completed angle 2\n   \ud83d\udcdd Creating script for angle 3: The Meek as Modern Mavericks\n   \u2705 Completed angle 3\n\ud83d\udcbe Saved to: multi_angle_content_3_The_Power_of_Humility.json\n\n\ud83d\udcca Summary for The Power of Humility:\n   1. From Weakness to Strength (Score: 28)\n      Target: Young professionals struggling with identity and self-perception\n   2. The Unexpected Heirs of God's Kingdom (Score: 28)\n      Target: People from underrepresented communities seeking hope and empowerment\n   3. The Meek as Modern Mavericks (Score: 28)\n      Target: College students and young adults interested in social justice and activism\n\n==================== Content Item 4 ====================\n\ud83d\udcdc Passage: Genesis 1:1\n\ud83d\udcd6 Text: In the beginning God created the heavens and the earth.\n\ud83c\udfaf Generating angles for: Creation and Divine Power\n\u2705 Generated 3 narrative angles\n   \ud83d\udcdd Creating script for angle 1: Personal Faith Journey\n   \u2705 Completed angle 1\n   \ud83d\udcdd Creating script for angle 2: Modern Life Application\n   \u2705 Completed angle 2\n   \ud83d\udcdd Creating script for angle 3: Hope and Encouragement\n   \u2705 Completed angle 3\n\ud83d\udcbe Saved to: multi_angle_content_4_Creation_and_Divine_Power.json\n\n\ud83d\udcca Summary for Creation and Divine Power:\n   1. Personal Faith Journey (Score: 28)\n      Target: Young adults seeking authentic faith\n   2. Modern Life Application (Score: 28)\n      Target: Working professionals and parents\n   3. Hope and Encouragement (Score: 28)\n      Target: People going through life challenges\n\n==================== Content Item 5 ====================\n\ud83d\udcdc Passage: Genesis 1:3\n\ud83d\udcd6 Text: And God said, 'Let there be light,' and there was light.\n\ud83c\udfaf Generating angles for: Light Overcoming Darkness\n\u2705 Generated 3 narrative angles\n   \ud83d\udcdd Creating script for angle 1: The Power of a Single Command\n   \u2705 Completed angle 1\n   \ud83d\udcdd Creating script for angle 2: From Chaos to Clarity\n   \u2705 Completed angle 2\n   \ud83d\udcdd Creating script for angle 3: The Light Within Us\n   \u2705 Completed angle 3\n\ud83d\udcbe Saved to: multi_angle_content_5_Light_Overcoming_Darkness.json\n\n\ud83d\udcca Summary for Light Overcoming Darkness:\n   1. The Power of a Single Command (Score: 28)\n      Target: Young professionals\n   2. From Chaos to Clarity (Score: 28)\n      Target: Those dealing with trauma or hardship\n   3. The Light Within Us (Score: 28)\n      Target: Spiritual seekers or those on a personal growth journey\n\n\ud83c\udf89 Generated content with multiple angles for 5 passages!\n\ud83d\udcc1 Files created:\n   - multi_angle_content_1_Gods_Unconditional_Love.json\n   - multi_angle_content_2_Finding_Purpose_in_Suffering.json\n   - multi_angle_content_3_The_Power_of_Humility.json\n   - multi_angle_content_4_Creation_and_Divine_Power.json\n   - multi_angle_content_5_Light_Overcoming_Darkness.json\n   - multi_angle_content_summary.json\n"
+  },
+  "summary": {
+    "requested_concepts": 3,
+    "concepts_used": [
+      "Finding Hope in Uncertainty",
+      "Power of Christian Community",
+      "Overcoming Spiritual Anxiety"
+    ],
+    "success": true
+  }
+}
